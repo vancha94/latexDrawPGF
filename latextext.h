@@ -8,7 +8,7 @@ class LatexText : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    LatexText();
+    LatexText(QWidget *parent);
 private:
     const QString startStr = "\begin{tikzpicture}";
     const QString endStr = "\end{tikzpicture}";
