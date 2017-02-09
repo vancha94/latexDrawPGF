@@ -19,9 +19,14 @@ public:
     Scene(QObject* parent = 0);
 
     void setMode(Mode mode);
+
     void undo();
     void redo();
-protected:
+
+    void pushStack(QGraphicsItem *item);
+    void popStack();
+    void resetText();
+protected: //events
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -30,15 +35,23 @@ signals:
     void transmitText(QString str);
 private:
     Mode sceneMode;
+    // draw properties
     QPointF origPoint;
     LineItem *lineItem;
     QGraphicsItem *drawItem;
     QGraphicsLineItem* itemToDraw;
+    // undo/redo properties
     QUndoStack *undoStack;
     QAction *undoAction;
     QAction *redoAction;
     QList<QPointF> oldPos, newPos;
     bool isMoveElemnts;
+    //text properties
+    QStack<QGraphicsItem*> itemStack;
+    QStack<QString> textStack;
+
+
+
 
 
 

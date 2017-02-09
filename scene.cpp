@@ -47,6 +47,29 @@ void Scene::redo()
     redoAction->trigger();
 }
 
+void Scene::pushStack(QGraphicsItem *item)
+{
+    AbstractItem *tmpItem = dynamic_cast<AbstractItem*>(item);
+    textStack.push(tmpItem->prepareText());
+    itemStack.push(item);
+}
+
+void Scene::popStack()
+{
+    auto tmp = itemStack.pop();
+    auto tmp1 = textStack.pop();
+}
+
+void Scene::resetText()
+{
+    textStack.clear();
+    foreach (QGraphicsItem* item, itemStack)
+    {
+        AbstractItem* tmpItem = dynamic_cast<AbstractItem*> item;
+        textStack.push(tmpItem->prepareText());
+    }
+}
+
 
 
 void Scene::makeItemsControllable(bool areControllable)

@@ -34,6 +34,7 @@ private:
     QAction* redoAction;
 
 
+
     QToolBar* drawingToolBar;
     QToolBar* colorToolBar;
     QToolBar* textToolBar;

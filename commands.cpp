@@ -1,7 +1,8 @@
 #include "commands.h"
+#include <abstractitem.h>
 
-AddCommand::AddCommand(QGraphicsItem *line, QUndoCommand *parent)
-    : QUndoCommand(parent)
+AddCommand::AddCommand(QGraphicsItem *line, QUndoCommand *parentUndo, QObject *parentObj )
+    : QObject(parentObj), QUndoCommand(parentUndo)
 {
     static int itemCount = 0;
     item = line;
@@ -15,24 +16,30 @@ AddCommand::AddCommand(QGraphicsItem *line, QUndoCommand *parent)
 void AddCommand::undo()
 {
     item->setVisible(false);
+    emit popStackItem();
+
 }
 
 void AddCommand::redo()
 {
     item->setVisible(true);
+    emit pushStackItem(item);
 }
+
+
 
 AddCommand::~AddCommand()
 {
-    item = NULL;
+   //QObject::~QObject();
+
 }
 
 
 MoveCommand::MoveCommand(QList<QGraphicsItem *> _itemList,
                          QList<QPointF> _oldPos,
                          QList<QPointF> _newPos,
-                         QUndoCommand *parent)
-    : QUndoCommand(parent)
+                         QUndoCommand *parent, QObject *parentObj)
+    :QObject(parentObj), QUndoCommand(parent)
 {
     oldPos = _oldPos;
     newPos = _newPos;
@@ -51,6 +58,7 @@ void MoveCommand::undo()
    {
        itemsList[i]->setPos(oldPos[i]);
    }
+   emit useCommand();
 }
 
 void MoveCommand::redo()
@@ -60,10 +68,11 @@ void MoveCommand::redo()
    {
        itemsList[i]->setPos(newPos[i]);
    }
+   emit useCommand();
 }
 
-DeleteCommand::DeleteCommand(QList<QGraphicsItem *> _itemList, QUndoCommand *parent)
-    : QUndoCommand(parent)
+DeleteCommand::DeleteCommand(QList<QGraphicsItem *> _itemList, QUndoCommand *parent, QObject *parentObj)
+    :QObject(parentObj), QUndoCommand(parent)
 {
     itemsList = _itemList;
 }
@@ -78,7 +87,9 @@ void DeleteCommand::undo()
     foreach(QGraphicsItem* item, itemsList)
     {
         item->setVisible(true);
+
     }
+    emit useCommand();
 }
 
 void DeleteCommand::redo()
@@ -87,4 +98,5 @@ void DeleteCommand::redo()
     {
         item->setVisible(false);
     }
+    emit useCommand();
 }

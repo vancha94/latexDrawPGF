@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QDockWidget>
+#include <QDebug>
 
 MainWindow::MainWindow()
 {
@@ -62,6 +63,8 @@ void MainWindow::createActions()
     redoAction = new QAction("Redo", this);
     redoAction->setIcon(QIcon(":/icons/redo.png"));
     connect(redoAction,&QAction::triggered,scene,&Scene::redo);
+
+
 }
 
 void MainWindow::createConnections()
@@ -77,6 +80,7 @@ void MainWindow::actionGroupClicked(QAction *action)
     scene->setMode(Scene::Mode(action->data().toInt()));
 }
 
+
 void MainWindow::createDrawToolBar()
 {
     drawingToolBar = new QToolBar;
@@ -87,4 +91,5 @@ void MainWindow::createDrawToolBar()
 
     drawingToolBar->addAction(selectAction);
     drawingToolBar->addAction(lineAction);
+
 }
