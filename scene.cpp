@@ -55,10 +55,15 @@ void Scene::redo()
     redoAction->trigger();
 }
 
-void Scene::pushStack(QGraphicsItem *item)
+void Scene::addText(QGraphicsItem *item)
 {
     AbstractItem *tmpItem = dynamic_cast<AbstractItem*>(item);
     textStack.push(tmpItem->prepareText());
+}
+
+void Scene::pushStack(QGraphicsItem *item)
+{
+    addText(item);
     itemStack.push(item);
 }
 
@@ -152,6 +157,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     if(sceneMode == DrawLine)
     {
+
         addLine(addCommand, event);
 
     }
@@ -194,12 +200,18 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     //if(sceneMode == DrawLine && lineItem)
     //emit lineItem->itemChanged();
     // Move
+    if(sceneMode == DrawLine)
+    {
+       if(lineItem)
+        addText(lineItem);
+        lineItem=0;
+    }
     if(sceneMode == SelectObject)
     {
         movingElementsEnd();
 
     }
-    lineItem = 0;
+  //  lineItem = 0;
     QGraphicsScene::mouseReleaseEvent(event);
 }
 

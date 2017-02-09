@@ -69,6 +69,7 @@ private: //methods
     void movingElementsEnd();
     void movingsElementsStart();
     void addCommandConnectSignal(AddCommand *addCommand);
+    void addText(QGraphicsItem *item);
 };
 
 #endif // SCENE_H

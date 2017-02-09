@@ -31,6 +31,7 @@ signals:
 private:
     //item newItem;
     QGraphicsItem *item;
+    bool flag;
 };
 
 
