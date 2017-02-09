@@ -23,7 +23,7 @@ public:
     void redo() Q_DECL_OVERRIDE;
 
 signals:
-    void pushStackItem(QGraphicsItem * stackItem);
+    void pushStackItem(QGraphicsItem* stackItem);
     void popStackItem();
 
 

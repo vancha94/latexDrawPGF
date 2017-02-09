@@ -1,7 +1,7 @@
 ﻿#include "scene.h"
 //#define private public
 #include <QDebug>
-#include <commands.h>
+//#include <commands.h>
 
 Scene::Scene(QObject* parent): QGraphicsScene(parent)
 {
@@ -11,6 +11,12 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     undoStack = new QUndoStack(this);
     undoAction = undoStack->createUndoAction(this);
     redoAction = undoStack->createRedoAction(this);
+
+
+  //  view = new QUndoView(undoStack);
+ //   view->show();
+
+
 
     // connectSignals();
 }
@@ -38,7 +44,9 @@ void Scene::setMode(Mode mode)
 
 void Scene::undo()
 {
+   //Q_ASSERT(false);
     undoAction->trigger();
+
     // qDebug() << 1;
 }
 
@@ -56,8 +64,11 @@ void Scene::pushStack(QGraphicsItem *item)
 
 void Scene::popStack()
 {
+//  if (!(itemStack.isEmpty() && textStack.isEmpty()))
+//  {
     auto tmp = itemStack.pop();
     auto tmp1 = textStack.pop();
+  //}
 }
 
 void Scene::resetText()
@@ -65,7 +76,7 @@ void Scene::resetText()
     textStack.clear();
     foreach (QGraphicsItem* item, itemStack)
     {
-        AbstractItem* tmpItem = dynamic_cast<AbstractItem*> item;
+        AbstractItem* tmpItem = dynamic_cast<AbstractItem*> (item);
         textStack.push(tmpItem->prepareText());
     }
 }
@@ -96,17 +107,28 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
 }
 
+void Scene::addCommandConnectSignal(AddCommand *addCommand)
+{
+   connect(addCommand,&AddCommand::pushStackItem,this,&Scene::pushStack);
+    connect(addCommand,&AddCommand::popStackItem,this,&Scene::popStack);
+   // connect(addCommand,SIGNAL(pushStackItem(QGraphicsItem*)),this,SLOT(pushStack(QGraphicsItem*)));
+
+}
+
 void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event)
 {
     if(!lineItem)
     {
 
         lineItem = new LineItem();
+
         addCommand = new AddCommand(lineItem);
+        addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
         undoStack->push(addCommand);
         this->addItem(lineItem);
         lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
         lineItem->setPos(origPoint);
+
     }
     lineItem->setLine(0,0,
                       event->scenePos().x() - origPoint.x(),
@@ -127,6 +149,7 @@ void Scene::movingsElementsStart()
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QUndoCommand *addCommand;
+
     if(sceneMode == DrawLine)
     {
         addLine(addCommand, event);
@@ -156,8 +179,9 @@ void Scene::movingElementsEnd()
         if(oldPos.first() != newPos.first() &&
                 oldPos.size() == newPos.size())
         {
-            QUndoCommand *moveCommand = new MoveCommand(tmpList,oldPos,newPos);
-            undoStack->push(moveCommand);
+            MoveCommand *moveCommand = new MoveCommand(tmpList,oldPos,newPos);
+            undoStack->push(dynamic_cast<QUndoCommand*>(moveCommand));
+            connect(moveCommand,&MoveCommand::useCommand,this,&Scene::resetText);
         }
         isMoveElemnts = false;
 
@@ -186,8 +210,9 @@ void Scene::keyPressEvent(QKeyEvent *event)
         auto tmpList = selectedItems();
         if(tmpList.size())
         {
-            QUndoCommand *deleteCommand = new DeleteCommand(tmpList);
-            undoStack->push(deleteCommand);
+            DeleteCommand *deleteCommand = new DeleteCommand(tmpList);
+            undoStack->push(dynamic_cast<QUndoCommand*>(deleteCommand));
+            connect(deleteCommand,&DeleteCommand::useCommand,this,&Scene::resetText);
         }
 
 

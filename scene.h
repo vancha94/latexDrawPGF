@@ -11,6 +11,8 @@
 #include <QGraphicsItem>
 #include <qstack.h>
 #include <QUndoStack>
+#include <commands.h>
+#include <QUndoView>
 
 class Scene : public QGraphicsScene
 {
@@ -23,7 +25,9 @@ public:
     void undo();
     void redo();
 
+public slots:
     void pushStack(QGraphicsItem *item);
+
     void popStack();
     void resetText();
 protected: //events
@@ -50,6 +54,9 @@ private:
     QStack<QGraphicsItem*> itemStack;
     QStack<QString> textStack;
 
+    QUndoView *view;
+
+
 
 
 
@@ -61,6 +68,7 @@ private: //methods
     void addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
     void movingElementsEnd();
     void movingsElementsStart();
+    void addCommandConnectSignal(AddCommand *addCommand);
 };
 
 #endif // SCENE_H

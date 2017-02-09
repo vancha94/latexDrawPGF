@@ -10,6 +10,7 @@ AddCommand::AddCommand(QGraphicsItem *line, QUndoCommand *parentUndo, QObject *p
    // myGraphicsScene->addItem(line);
    // scene->update();
     ++itemCount;
+     emit pushStackItem(item);
 
 }
 
@@ -23,6 +24,7 @@ void AddCommand::undo()
 void AddCommand::redo()
 {
     item->setVisible(true);
+   // bool tmp = signalsBlocked();
     emit pushStackItem(item);
 }
 
