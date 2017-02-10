@@ -1,10 +1,21 @@
 #include "lineitem.h"
 #include <QDebug>
 
-LineItem::LineItem()
+LineItem::LineItem()//:    QGraphicsLineItem(item), AbstractItem(item)
 {
-   setCooordinats();
+    setCooordinats();
 }
+
+//QRectF LineItem::boundingRect()
+//{
+//    return QGraphicsLineItem::boundingRect();
+
+//}
+
+//void LineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+//{
+// QGraphicsLineItem::paint(painter, option,widget);
+//}
 
 QString LineItem::prepareText()
 {

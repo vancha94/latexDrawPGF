@@ -13,8 +13,9 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     redoAction = undoStack->createRedoAction(this);
 
 
-  //  view = new QUndoView(undoStack);
- //   view->show();
+    //QGraphicsItem* tmpit = new QGraphicsItem();
+    //  view = new QUndoView(undoStack);
+    //   view->show();
 
 
 
@@ -44,7 +45,7 @@ void Scene::setMode(Mode mode)
 
 void Scene::undo()
 {
-   //Q_ASSERT(false);
+    //Q_ASSERT(false);
     undoAction->trigger();
 
     // qDebug() << 1;
@@ -57,23 +58,39 @@ void Scene::redo()
 
 void Scene::addText(QGraphicsItem *item)
 {
+    QString tmpStr;
     AbstractItem *tmpItem = dynamic_cast<AbstractItem*>(item);
-    textStack.push(tmpItem->prepareText());
+    tmpItem->setCooordinats();
+    tmpStr=tmpItem->prepareText();
+    textStack.push(tmpStr);
+
+}
+
+void Scene::attachStrings()
+{
+    QString tmpString = "";
+    foreach (QString str, textStack)
+    {
+        tmpString+=str + "\n";
+    }
+    emit transmitText(tmpString);
 }
 
 void Scene::pushStack(QGraphicsItem *item)
 {
     addText(item);
     itemStack.push(item);
+    attachStrings();
 }
 
 void Scene::popStack()
 {
-//  if (!(itemStack.isEmpty() && textStack.isEmpty()))
-//  {
+    //  if (!(itemStack.isEmpty() && textStack.isEmpty()))
+    //  {
     auto tmp = itemStack.pop();
     auto tmp1 = textStack.pop();
-  //}
+    attachStrings();
+    //}
 }
 
 void Scene::resetText()
@@ -81,12 +98,10 @@ void Scene::resetText()
     textStack.clear();
     foreach (QGraphicsItem* item, itemStack)
     {
-        AbstractItem* tmpItem = dynamic_cast<AbstractItem*> (item);
-        textStack.push(tmpItem->prepareText());
+        addText(item);
     }
+    attachStrings();
 }
-
-
 
 void Scene::makeItemsControllable(bool areControllable)
 {
@@ -114,9 +129,9 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Scene::addCommandConnectSignal(AddCommand *addCommand)
 {
-   connect(addCommand,&AddCommand::pushStackItem,this,&Scene::pushStack);
+    connect(addCommand,&AddCommand::pushStackItem,this,&Scene::pushStack);
     connect(addCommand,&AddCommand::popStackItem,this,&Scene::popStack);
-   // connect(addCommand,SIGNAL(pushStackItem(QGraphicsItem*)),this,SLOT(pushStack(QGraphicsItem*)));
+
 
 }
 
@@ -182,12 +197,17 @@ void Scene::movingElementsEnd()
         {
             newPos << item->pos();
         }
-        if(oldPos.first() != newPos.first() &&
-                oldPos.size() == newPos.size())
+        if( !newPos.isEmpty() &&
+                !oldPos.isEmpty())
         {
-            MoveCommand *moveCommand = new MoveCommand(tmpList,oldPos,newPos);
-            undoStack->push(dynamic_cast<QUndoCommand*>(moveCommand));
-            connect(moveCommand,&MoveCommand::useCommand,this,&Scene::resetText);
+            if(oldPos.first() != newPos.first() &&
+                    oldPos.size() == newPos.size())
+            {
+                MoveCommand *moveCommand = new MoveCommand(tmpList,oldPos,newPos);
+                connect(moveCommand,&MoveCommand::useCommand,this,&Scene::resetText);
+                undoStack->push(dynamic_cast<QUndoCommand*>(moveCommand));
+            }
+
         }
         isMoveElemnts = false;
 
@@ -197,13 +217,11 @@ void Scene::movingElementsEnd()
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
 
-    //if(sceneMode == DrawLine && lineItem)
-    //emit lineItem->itemChanged();
-    // Move
+
     if(sceneMode == DrawLine)
     {
-       if(lineItem)
-        addText(lineItem);
+        if(lineItem)
+            pushStack(lineItem);
         lineItem=0;
     }
     if(sceneMode == SelectObject)
@@ -211,7 +229,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         movingElementsEnd();
 
     }
-  //  lineItem = 0;
+    //  lineItem = 0;
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
@@ -223,8 +241,8 @@ void Scene::keyPressEvent(QKeyEvent *event)
         if(tmpList.size())
         {
             DeleteCommand *deleteCommand = new DeleteCommand(tmpList);
-            undoStack->push(dynamic_cast<QUndoCommand*>(deleteCommand));
             connect(deleteCommand,&DeleteCommand::useCommand,this,&Scene::resetText);
+            undoStack->push(dynamic_cast<QUndoCommand*>(deleteCommand));
         }
 
 

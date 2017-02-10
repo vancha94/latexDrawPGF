@@ -71,6 +71,7 @@ void MainWindow::createConnections()
 {
     connect(drawActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(actionGroupClicked(QAction*)));
+    connect(scene,&Scene::transmitText,latexText,&LatexText::addText);
 
 
 }

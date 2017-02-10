@@ -6,16 +6,19 @@
 #include "abstractitem.h"
 #undef private
 
-class LineItem : public QGraphicsLineItem, public AbstractItem
+class LineItem: public AbstractItem, public QGraphicsLineItem
 {
 public:
     LineItem();
+//    LineItem(QGraphicsLineItem* item=0);
+//    QRectF boundingRect();
+//    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
     QString prepareText();
-    void setPos(const QPointF &pos);
+    void setPos(const QPointF &pos);// Q_DECL_OVERRIDE;
     void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
-    void setVisible(bool visible);
-private: //methods
-
+    void setVisible(bool visible);// Q_DECL_OVERRIDE;
+//private: //methods
+public:
     void setCooordinats();
 };
 

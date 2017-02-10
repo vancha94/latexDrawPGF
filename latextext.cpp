@@ -9,6 +9,6 @@ void LatexText::addText(QString str)
 {
    clear();
    middleStr+= str  + "\n";
-    QString tmpStr = startStr +  middleStr + endStr;
+    QString tmpStr = startStr +  str + endStr;
     insertPlainText(tmpStr);
 }

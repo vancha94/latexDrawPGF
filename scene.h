@@ -16,6 +16,7 @@
 
 class Scene : public QGraphicsScene
 {
+    Q_OBJECT
 public:
     enum Mode {NoMode, SelectObject, DrawLine};
     Scene(QObject* parent = 0);
@@ -25,11 +26,11 @@ public:
     void undo();
     void redo();
 
-public slots:
     void pushStack(QGraphicsItem *item);
-
     void popStack();
     void resetText();
+
+
 protected: //events
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -54,13 +55,6 @@ private:
     QStack<QGraphicsItem*> itemStack;
     QStack<QString> textStack;
 
-    QUndoView *view;
-
-
-
-
-
-
 
 private: //methods
     void makeItemsControllable(bool areControllable);
@@ -70,6 +64,7 @@ private: //methods
     void movingsElementsStart();
     void addCommandConnectSignal(AddCommand *addCommand);
     void addText(QGraphicsItem *item);
+    void attachStrings();
 };
 
 #endif // SCENE_H
