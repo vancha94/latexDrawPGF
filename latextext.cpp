@@ -7,8 +7,11 @@ LatexText::LatexText(QWidget *parent):QPlainTextEdit(parent)
 
 void LatexText::addText(QString str)
 {
-   clear();
-   middleStr+= str  + "\n";
-    QString tmpStr = startStr +  str + endStr;
+    clear();
+    middleStr+= str  + "\n";
+    QString tmpStr ;
+    if(str!="")
+        tmpStr  = startStr +  str + endStr;
+    else tmpStr="";
     insertPlainText(tmpStr);
 }

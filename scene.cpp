@@ -71,6 +71,7 @@ void Scene::attachStrings()
     QString tmpString = "";
     foreach (QString str, textStack)
     {
+        if(str!="")
         tmpString+=str + "\n";
     }
     emit transmitText(tmpString);
