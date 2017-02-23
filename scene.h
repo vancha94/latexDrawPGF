@@ -30,7 +30,11 @@ public:
     void popStack();
     void resetText();
 
-
+public Q_SLOTS:
+    void setBackgroundColor(QColor color,QString str);
+    void setBorderColor(QColor color, QString str);
+    void setBorderAlpha(int value);
+    void setBacgroundAlpha(int value);
 protected: //events
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -40,20 +44,30 @@ signals:
     void transmitText(QString str);
 private:
     Mode sceneMode;
+
     // draw properties
     QPointF origPoint;
     LineItem *lineItem;
     QGraphicsItem *drawItem;
     QGraphicsLineItem* itemToDraw;
     // undo/redo properties
+
     QUndoStack *undoStack;
     QAction *undoAction;
     QAction *redoAction;
     QList<QPointF> oldPos, newPos;
     bool isMoveElemnts;
+
     //text properties
     QStack<QGraphicsItem*> itemStack;
     QStack<QString> textStack;
+
+    //color Properties
+    QBrush background;
+    QPen border;
+    QString backgroundColor;
+    QString borderColor;
+
 
 
 private: //methods

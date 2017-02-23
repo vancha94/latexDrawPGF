@@ -10,7 +10,7 @@ class LatexText : public QPlainTextEdit
 public:
     LatexText(QWidget *parent);
 private:
-    const QString startStr = "%\\usepackage{tikz}\n\\begin{tikzpicture}[scale=0.01]\n";
+    const QString startStr = "%\\usepackage[dvipsnames]{xcolor}\n%\\usepackage{tikz}\n\\begin{tikzpicture}[scale=0.01]\n";
     const QString endStr = "\\end{tikzpicture}";
     QString middleStr;
 public:

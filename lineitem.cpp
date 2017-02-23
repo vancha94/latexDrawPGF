@@ -1,7 +1,8 @@
 #include "lineitem.h"
 #include <QDebug>
 
-LineItem::LineItem()//:    QGraphicsLineItem(item), AbstractItem(item)
+LineItem::LineItem(QGraphicsLineItem* item):
+     AbstractItem(),QGraphicsLineItem(item)
 {
     setCooordinats();
 }
@@ -24,7 +25,8 @@ QString LineItem::prepareText()
     if(isVis)
     {
         auto tmp = points[1];
-        tmpStr = "\\draw (";
+        tmpStr = "\\draw[" + borderColor;
+        tmpStr+="!" +QString::number(borderAlpha) + "] (";
         tmpStr+=QString::number(scenePosition.x())+",";
         tmpStr+=QString::number(-scenePosition.y())+") -- (";
         tmpStr+=QString::number(tmp.x()+scenePosition.x())+",";
@@ -56,6 +58,12 @@ void LineItem::setVisible(bool visible)
 {
     QGraphicsLineItem::setVisible(visible);
     setCooordinats();
+}
+
+void LineItem::setPen(const QPen &pen,QString str)
+{
+    QGraphicsLineItem::setPen(pen);
+    setBorderColor(str);
 }
 
 void LineItem::setCooordinats()

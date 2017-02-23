@@ -12,6 +12,15 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     undoAction = undoStack->createUndoAction(this);
     redoAction = undoStack->createRedoAction(this);
 
+    border.setColor(QColor("#000000"));
+    borderColor = "Black";
+
+    background.setColor(QColor("#ffffff"));
+    backgroundColor = "White";
+
+
+    border.setWidth(3);
+
 
     //QGraphicsItem* tmpit = new QGraphicsItem();
     //  view = new QUndoView(undoStack);
@@ -104,6 +113,41 @@ void Scene::resetText()
     attachStrings();
 }
 
+void Scene::setBackgroundColor(QColor color, QString str)
+{
+    background.setColor(color);
+    backgroundColor = str;
+}
+
+void Scene::setBorderColor(QColor color, QString str)
+{
+    border.setColor(color);
+    borderColor = str;
+}
+
+void Scene::setBorderAlpha(int value)
+{
+    if (value > 255)
+        value = 255;
+    else if(value < 0)
+        value = 0;
+    auto tmp  = border.color();
+    tmp.setAlpha(value);
+    border.setColor(tmp);
+}
+
+void Scene::setBacgroundAlpha(int value)
+{
+    if (value > 255)
+        value = 255;
+    else if(value < 0)
+        value = 0;
+    auto tmp = background.color();
+    tmp.setAlpha(value);
+    background.setColor(tmp);
+    //.color().setAlpha(value);
+}
+
 void Scene::makeItemsControllable(bool areControllable)
 {
     foreach(QGraphicsItem* item, items())
@@ -143,11 +187,15 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event)
 
         lineItem = new LineItem();
 
+        lineItem->setBorderAlpha(border.color().alphaF()*100);
+
         addCommand = new AddCommand(lineItem);
         addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
         undoStack->push(addCommand);
         this->addItem(lineItem);
-        lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
+        lineItem->setPen(border,borderColor);
+       // lineItem->setPen(QPen());
+       // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
         lineItem->setPos(origPoint);
 
     }
