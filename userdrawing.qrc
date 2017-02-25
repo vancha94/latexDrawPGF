@@ -4,5 +4,12 @@
         <file>icons/line.png</file>
         <file>icons/redo.png</file>
         <file>icons/undo.png</file>
+        <file>icons/width/semithick.png</file>
+        <file>icons/width/thick.png</file>
+        <file>icons/width/thin.png</file>
+        <file>icons/width/ultra_thick.png</file>
+        <file>icons/width/ultra_thin.png</file>
+        <file>icons/width/very_thick.png</file>
+        <file>icons/width/very_thin.png</file>
     </qresource>
 </RCC>

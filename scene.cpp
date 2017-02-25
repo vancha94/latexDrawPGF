@@ -19,7 +19,7 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     backgroundColor = "White";
 
 
-    border.setWidth(3);
+  //  border.setWidth(3);
 
 
     //QGraphicsItem* tmpit = new QGraphicsItem();
@@ -146,6 +146,11 @@ void Scene::setBacgroundAlpha(int value)
     tmp.setAlpha(value);
     background.setColor(tmp);
     //.color().setAlpha(value);
+}
+
+void Scene::setPenWidth(qreal value)
+{
+    border.setWidthF(value);
 }
 
 void Scene::makeItemsControllable(bool areControllable)

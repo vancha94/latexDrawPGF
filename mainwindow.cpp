@@ -12,6 +12,7 @@ MainWindow::MainWindow()
 
     dock = new QDockWidget(QString("Latex text"),this);
     dock->setAllowedAreas(Qt::RightDockWidgetArea);
+
     // dock->setWindowFlags(Qt::WindowTitleHint);
 
     latexText = new LatexText(dock);
@@ -32,6 +33,8 @@ MainWindow::MainWindow()
 
 
     // colorWidget->show();
+
+
 
 
 }
@@ -119,11 +122,11 @@ void MainWindow::buttonColorClicked()
     QRect rectPallete = colorBorderWidget->geometry();
 
     widget->setGeometry(rectButton.x()+rectWindow.x(),
-                             rectWindow.y()-
-                             4*rectButton.y()-
-                             rectPallete.height()+
-                             rectButton.height()+rectToolbar.y(),
-                             rectPallete.width(),rectPallete.height());
+                        rectWindow.y()-
+                        4*rectButton.y()-
+                        rectPallete.height()+
+                        rectButton.height()+rectToolbar.y(),
+                        rectPallete.width(),rectPallete.height());
     widget->show();
 }
 
@@ -170,13 +173,15 @@ void MainWindow::borderButtonClicked()
 
 void MainWindow::textButtonClicked()
 {
-     clickedColorButton = colorButtons::TEXT;
+    clickedColorButton = colorButtons::TEXT;
 }
 
 void MainWindow::createDrawToolBar()
 {
     drawingToolBar = new QToolBar;
     addToolBar(Qt::TopToolBarArea, drawingToolBar);
+    drawingToolBar->setMovable(false);
+
     drawingToolBar->addAction(undoAction);
     drawingToolBar->addAction(redoAction);
     drawingToolBar->addSeparator();
@@ -186,7 +191,7 @@ void MainWindow::createDrawToolBar()
 
 }
 
-void MainWindow::createColorToolBar()
+void MainWindow::createColorWidgets()
 {
     colorBorderWidget = new ColorLatexWidget();
     colorBorderWidget->show();
@@ -196,10 +201,6 @@ void MainWindow::createColorToolBar()
 
     colorTextWidget = new ColorLatexWidget();
     colorTextWidget->show();
-
-    colorToolBar = new QToolBar;
-    addToolBar(Qt::BottomToolBarArea,colorToolBar);
-
 
     clickedColorButton = colorButtons::BORDER;
     buttonBorder = new QPushButton;
@@ -212,7 +213,7 @@ void MainWindow::createColorToolBar()
     clickedColorButton = colorButtons::BACKGROUND;
     buttonBackground = new QPushButton;
     colorButtonChange(QColor("#ffffff"),"White");
-     buttonBackground->setToolTip("Background");
+    buttonBackground->setToolTip("Background");
 
     clickedColorButton = colorButtons::TEXT;
     buttonText = new QPushButton;
@@ -239,10 +240,63 @@ void MainWindow::createColorToolBar()
 
     colorToolBar->addWidget(buttonBorder);
     colorToolBar->addWidget(buttonBackground);
-  //  colorToolBar->addWidget(buttonText);
+    //  colorToolBar->addWidget(buttonText);
 
     connect(colorBorderWidget,SIGNAL(saturationChanged(int)),scene,SLOT(setBorderAlpha(int)));
     connect(colorBackgroundWidget,SIGNAL(saturationChanged(int)),scene,SLOT(setBacgroundAlpha(int)));
+}
 
+void MainWindow::widthIndexToValue(int inedex)
+{
+    qreal tmpValue = qvariant_cast<qreal>(widthBox->currentData());
+    emit changedWidthValue(tmpValue);
+}
+
+void MainWindow::createWidthBox()
+{
+    widthBox = new QComboBox;
+    // полученные размеры иконки получены эмперически:
+    // 15 - высота панели
+    // 126 - из обратной пропорции (изначально картинка была 420*50)
+    widthBox->setIconSize(QSize(126,15));
+
+    // последние значения - различные значение для толлщин пера
+    // они подобраны эмпирически
+    //    0,1	0,5
+    //    0,2	1
+    //    0,4	2
+    //    0,6	3
+    //    0,8	4
+    //    1,2	6
+    //    1,6	8
+
+
+    widthBox->addItem(QIcon(":/icons/width/ultra_thin.png"),   "0.1pt",0.5);
+    widthBox->addItem(QIcon(":/icons/width/very_thin.png"),    "0.2pt",1);
+    widthBox->addItem(QIcon(":/icons/width/thin.png"),         "0.4pt",2);
+    widthBox->addItem(QIcon(":/icons/width/semithick.png"),    "0.6pt",3);
+    widthBox->addItem(QIcon(":/icons/width/thick.png"),        "0.8pt",4);
+    widthBox->addItem(QIcon(":/icons/width/very_thick.png"),   "1.2pt",6);
+    widthBox->addItem(QIcon(":/icons/width/ultra_thick.png"),  "1.6pt",8);
+
+    connect(widthBox,SIGNAL(currentIndexChanged(int)),this,SLOT(widthIndexToValue(int)));
+    connect(this,SIGNAL(changedWidthValue(qreal)),scene,SLOT(setPenWidth(qreal)));
+    widthBox->setCurrentIndex(2);
+}
+
+void MainWindow::createColorToolBar()
+{
+
+    colorToolBar = new QToolBar;
+    addToolBar(Qt::BottomToolBarArea,colorToolBar);
+    colorToolBar->setMovable(false);
+
+    createColorWidgets();
+    createWidthBox();
+
+
+
+
+    colorToolBar->addWidget(widthBox);
 
 }

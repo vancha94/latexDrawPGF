@@ -11,6 +11,8 @@
 #include <QUndoStack>
 #include <colorlatexwidget.h>
 #include <QPushButton>
+#include <QSlider>
+#include <QComboBox>
 
 
 enum colorButtons
@@ -36,6 +38,8 @@ public slots:
     void bakgroundButtonClicked();
     void borderButtonClicked();
     void textButtonClicked();
+signals:
+    void changedWidthValue(qreal value);
 private:
     QGraphicsView* view;
     Scene* scene;
@@ -70,6 +74,9 @@ private:
     ColorLatexWidget *colorTextWidget;
 
 
+    QComboBox *widthBox;
+
+
 private: //methods
     void createActions();
     void createConnections();
@@ -80,6 +87,10 @@ private: //methods
 
     QPushButton * setButtonPointner();
     ColorLatexWidget *setWidgetPointner();
+    void createColorWidgets();
+
+   Q_SLOT void widthIndexToValue(int inedex);
+    void createWidthBox();
 };
 
 #endif // MAINWINDOW_H

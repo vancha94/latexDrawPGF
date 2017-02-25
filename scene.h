@@ -33,8 +33,11 @@ public:
 public Q_SLOTS:
     void setBackgroundColor(QColor color,QString str);
     void setBorderColor(QColor color, QString str);
+
     void setBorderAlpha(int value);
     void setBacgroundAlpha(int value);
+
+    void setPenWidth(qreal value);
 protected: //events
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

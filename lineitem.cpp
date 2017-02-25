@@ -1,5 +1,6 @@
 #include "lineitem.h"
 #include <QDebug>
+#include <QPen>
 
 LineItem::LineItem(QGraphicsLineItem* item):
      AbstractItem(),QGraphicsLineItem(item)
@@ -26,7 +27,8 @@ QString LineItem::prepareText()
     {
         auto tmp = points[1];
         tmpStr = "\\draw[" + borderColor;
-        tmpStr+="!" +QString::number(borderAlpha) + "] (";
+        tmpStr+="!" +QString::number(borderAlpha) + ",";
+        tmpStr+= width +"] (";
         tmpStr+=QString::number(scenePosition.x())+",";
         tmpStr+=QString::number(-scenePosition.y())+") -- (";
         tmpStr+=QString::number(tmp.x()+scenePosition.x())+",";
@@ -64,6 +66,8 @@ void LineItem::setPen(const QPen &pen,QString str)
 {
     QGraphicsLineItem::setPen(pen);
     setBorderColor(str);
+   // auto tmpValue = pen.widthF();
+    setWidth(pen.widthF());
 }
 
 void LineItem::setCooordinats()
