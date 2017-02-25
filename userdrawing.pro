@@ -7,7 +7,8 @@ SOURCES += \
     lineitem.cpp \
     latextext.cpp \
     commands.cpp \
-    colorlatexwidget.cpp
+    colorlatexwidget.cpp \
+    abstractitem.cpp
 
 HEADERS += \
     scene.h \

@@ -18,17 +18,15 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     background.setColor(QColor("#ffffff"));
     backgroundColor = "White";
 
-
-  //  border.setWidth(3);
-
-
-    //QGraphicsItem* tmpit = new QGraphicsItem();
-    //  view = new QUndoView(undoStack);
-    //   view->show();
+    //test code
 
 
+//    QVector<qreal> dashStyle;
+//    dashStyle << 4 << 0 ;
+//    border.setDashPattern(dashStyle);
 
-    // connectSignals();
+
+
 }
 
 void Scene::setMode(Mode mode)
