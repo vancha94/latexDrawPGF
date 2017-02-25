@@ -45,10 +45,13 @@ public:
 
 
 protected: //metods
-//    virtual QString paramToText();
+    // в подготовке текста вызывать данный метод только в таков виде
+    // "["+ paramToText() + "]"
+    virtual QString paramToText();
 private:
 
     void fillHash();
+    QString colorToText();
 };
 
 #endif // ABSTRACTITEM_H

@@ -8,16 +8,6 @@ LineItem::LineItem(QGraphicsLineItem* item):
     setCooordinats();
 }
 
-//QRectF LineItem::boundingRect()
-//{
-//    return QGraphicsLineItem::boundingRect();
-
-//}
-
-//void LineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-//{
-// QGraphicsLineItem::paint(painter, option,widget);
-//}
 
 QString LineItem::prepareText()
 {
@@ -26,10 +16,12 @@ QString LineItem::prepareText()
     if(isVis)
     {
         auto tmp = points[1];
-        tmpStr = "\\draw[" + borderColor;
-        tmpStr+="!" +QString::number(borderAlpha) + ",";
-        tmpStr+= width +"] (";
-        tmpStr+=QString::number(scenePosition.x())+",";
+//        tmpStr = "\\draw[" + borderColor;
+//        tmpStr+="!" +QString::number(borderAlpha) + ",";
+//        tmpStr+= width +"] (";
+        tmpStr = "\\draw";
+        tmpStr+="["+paramToText() +"]";
+        tmpStr+=" ("+QString::number(scenePosition.x())+",";
         tmpStr+=QString::number(-scenePosition.y())+") -- (";
         tmpStr+=QString::number(tmp.x()+scenePosition.x())+",";
         tmpStr+=QString::number(-(tmp.y()+scenePosition.y()))+");";

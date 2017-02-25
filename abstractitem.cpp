@@ -57,6 +57,21 @@ void AbstractItem::setPen(const QPen &pen, QString str)
     setWidth(pen.widthF());
 }
 
+QString AbstractItem::colorToText()
+{
+    return borderColor+"!"+QString::number(borderAlpha);
+}
+
+QString AbstractItem::paramToText()
+{
+    QString tmpStr="";
+
+    tmpStr+= colorToText() + ",";
+    tmpStr+= width;
+
+    return tmpStr;
+}
+
 
 
 void AbstractItem::fillHash()
