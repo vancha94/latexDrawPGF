@@ -65,9 +65,9 @@ void LineItem::setVisible(bool visible)
 void LineItem::setPen(const QPen &pen,QString str)
 {
     QGraphicsLineItem::setPen(pen);
-    setBorderColor(str);
-   // auto tmpValue = pen.widthF();
-    setWidth(pen.widthF());
+    AbstractItem::setPen(pen,str);
+
+
 }
 
 void LineItem::setCooordinats()

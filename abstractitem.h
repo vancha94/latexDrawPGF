@@ -4,6 +4,7 @@
 #include <QPointF>
 #include <QGraphicsItem>
 #include <QDebug>
+#include <QPen>
 
 class AbstractItem
 {
@@ -81,6 +82,13 @@ public:
         width = widthHash[value];
     }
 
+    virtual void setPen(const QPen &pen,QString str)
+    {
+        setBorderColor(str);
+        setWidth(pen.widthF());
+    }
+
+   // void
 private:
     QString saturationToText()
     {
