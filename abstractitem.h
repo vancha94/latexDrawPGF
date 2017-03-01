@@ -5,6 +5,7 @@
 #include <QGraphicsItem>
 #include <QDebug>
 #include <QPen>
+#include <paramslines.h>
 
 class AbstractItem
 {
@@ -14,6 +15,8 @@ protected:
     bool isVis;
 
 
+    ParamLines params;
+
     QString borderColor;
     QString backgroundColor;
     float borderAlpha;
@@ -21,6 +24,8 @@ protected:
 
     QHash<qreal, QString>  widthHash;
     QString width;
+
+    QString style;
 
 
 
@@ -40,18 +45,27 @@ public:
     void setBackgroundAlpha(float value);
 
 
-    void setWidth(qreal value);
-    virtual void setPen(const QPen &pen,QString str);
 
+
+    void setWidth(qreal value);
+    void setStyle(QString str);
+    virtual void setPen(const QPen &pen, ParamLines _params);
+
+
+    QString getStyle() const;
+
+    void setAllValues(ParamLines _params);
 
 protected: //metods
     // в подготовке текста вызывать данный метод только в таков виде
     // "["+ paramToText() + "]"
-    virtual QString paramToText();
+    virtual QString paramToText()=0;
+    QString backgroundColorToText();
 private:
 
     void fillHash();
-    QString colorToText();
+
+    void setAllvalues(ParamLines _params);
 };
 
 #endif // ABSTRACTITEM_H

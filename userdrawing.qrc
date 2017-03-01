@@ -11,5 +11,18 @@
         <file>icons/width/ultra_thin.png</file>
         <file>icons/width/very_thick.png</file>
         <file>icons/width/very_thin.png</file>
+        <file>icons/style/dashdotdotted.png</file>
+        <file>icons/style/dashdotted.png</file>
+        <file>icons/style/dashed.png</file>
+        <file>icons/style/densely_dashdotdotted.png</file>
+        <file>icons/style/densely_dashdotted.png</file>
+        <file>icons/style/densely_dotted.png</file>
+        <file>icons/style/dotted.png</file>
+        <file>icons/style/loosely_dashdotdotted.png</file>
+        <file>icons/style/loosely_dashdotted.png</file>
+        <file>icons/style/loosely_dashed.png</file>
+        <file>icons/style/loosely_dotted.png</file>
+        <file>icons/style/solid.png</file>
+        <file>icons/style/densely_dashed.png</file>
     </qresource>
 </RCC>

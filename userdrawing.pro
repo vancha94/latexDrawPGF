@@ -17,12 +17,13 @@ HEADERS += \
     latextext.h \
     abstractitem.h \
     commands.h \
-    colorlatexwidget.h
+    colorlatexwidget.h \
+    paramslines.h
 
 RESOURCES += \
     userdrawing.qrc
 
-DEFINES += QT_NO_DEBUG_OUTPUT
+#DEFINES += QT_NO_DEBUG_OUTPUT
 
 include(color_widgets.pri)
 

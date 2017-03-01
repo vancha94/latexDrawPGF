@@ -51,26 +51,34 @@ void AbstractItem::setWidth(qreal value)
     width = widthHash[value];
 }
 
-void AbstractItem::setPen(const QPen &pen, QString str)
+void AbstractItem::setStyle(QString str)
 {
-    setBorderColor(str);
-    setWidth(pen.widthF());
+    style = str;
 }
 
-QString AbstractItem::colorToText()
+void AbstractItem::setAllvalues(ParamLines _params)
+{
+    params = _params;
+
+    style = _params.style;
+    backgroundColor = _params.backgroundCOlor;
+    borderColor = _params.borderColor;
+}
+
+void AbstractItem::setPen(const QPen &pen, ParamLines _params)
+{
+    setBorderColor(_params.borderColor);
+    setWidth(pen.widthF());
+    setAllvalues(_params);
+
+  //  setStyle();
+}
+
+QString AbstractItem::backgroundColorToText()
 {
     return borderColor+"!"+QString::number(borderAlpha);
 }
 
-QString AbstractItem::paramToText()
-{
-    QString tmpStr="";
-
-    tmpStr+= colorToText() + ",";
-    tmpStr+= width;
-
-    return tmpStr;
-}
 
 
 

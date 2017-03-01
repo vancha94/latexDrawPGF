@@ -17,7 +17,9 @@ public:
     void setPos(const QPointF &pos);// Q_DECL_OVERRIDE;
     void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
     void setVisible(bool visible);// Q_DECL_OVERRIDE;
-    void setPen(const QPen &pen, QString str);
+    void setPen(const QPen &pen,ParamLines _params);
+protected:
+    QString paramToText();
 //    void setb
 //private: //methods
 public:

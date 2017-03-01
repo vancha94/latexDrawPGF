@@ -1,5 +1,4 @@
 ﻿#include "scene.h"
-//#define private public
 #include <QDebug>
 //#include <commands.h>
 
@@ -13,17 +12,19 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     redoAction = undoStack->createRedoAction(this);
 
     border.setColor(QColor("#000000"));
-    borderColor = "Black";
+    params.borderColor = "Black";
+
 
     background.setColor(QColor("#ffffff"));
-    backgroundColor = "White";
+    params.backgroundCOlor="White";
 
-    //test code
+    createLineStyles();
 
 
-//    QVector<qreal> dashStyle;
-//    dashStyle << 4 << 0 ;
-//    border.setDashPattern(dashStyle);
+
+     //test code
+
+
 
 
 
@@ -84,6 +85,63 @@ void Scene::attachStrings()
     emit transmitText(tmpString);
 }
 
+void Scene::addLineStyle(QString str, QPen pen, qreal delta)
+{
+    QVector<qreal> tmpVector = pen.dashPattern();
+
+    // для "просторных" стилей не видно что. что они более широкие, чем стандартные
+    // поэтому для видимости увеличиваем разрыв
+    if(delta>0)
+        delta*=3;
+
+    for (int i =1; i<tmpVector.size();i+=2)
+        tmpVector[i]+=delta;
+
+    // обработка ситуации для стиля solid
+    // для данного стиля dashPattern() возвращает пустой список
+    if (!tmpVector.size())
+        tmpVector << 10 << 0;
+    listOfLineStyles[str] = tmpVector;
+}
+
+void Scene::createLineStyles()
+{
+    // текстовые константы из LaTeX'а
+
+    // эта константа подобрана экспирементально
+    qreal deltaDensity=0.6;
+
+    QPen tmpPen;
+
+
+
+    tmpPen.setStyle(Qt::SolidLine);
+    addLineStyle("solid",tmpPen);
+    params.style = "solid";
+
+
+    tmpPen.setStyle(Qt::DotLine);
+    addLineStyle("dotted",tmpPen);
+    addLineStyle("densely dotted",tmpPen,-deltaDensity);
+    addLineStyle("loosely dotted",tmpPen,deltaDensity);
+
+    tmpPen.setStyle(Qt::DashLine);
+    addLineStyle("dashed",tmpPen);
+    addLineStyle("densely dashed",tmpPen,-deltaDensity);
+    addLineStyle("loosely dashed",tmpPen,deltaDensity);
+
+    tmpPen.setStyle(Qt::DashDotLine);
+    addLineStyle("dashdotted",tmpPen);
+    addLineStyle("densely dashdotted",tmpPen,-deltaDensity);
+    addLineStyle("loosely dashdotted",tmpPen,deltaDensity);
+
+    tmpPen.setStyle(Qt::DashDotDotLine);
+    addLineStyle("dashdotdotted",tmpPen);
+    addLineStyle("densely dashdotdotted",tmpPen,-deltaDensity);
+    addLineStyle("loosely dashdotdotted",tmpPen,deltaDensity);
+
+}
+
 void Scene::pushStack(QGraphicsItem *item)
 {
     addText(item);
@@ -114,13 +172,13 @@ void Scene::resetText()
 void Scene::setBackgroundColor(QColor color, QString str)
 {
     background.setColor(color);
-    backgroundColor = str;
+    params.backgroundCOlor = str;
 }
 
 void Scene::setBorderColor(QColor color, QString str)
 {
     border.setColor(color);
-    borderColor = str;
+    params.borderColor = str;
 }
 
 void Scene::setBorderAlpha(int value)
@@ -149,6 +207,20 @@ void Scene::setBacgroundAlpha(int value)
 void Scene::setPenWidth(qreal value)
 {
     border.setWidthF(value);
+}
+
+void Scene::setPenStyle(QString str)
+{
+
+    border.setDashPattern(listOfLineStyles[str]);
+    params.style = str;
+}
+
+void Scene::setPenStyle(QString str, QVector<qreal> vector, qreal offset)
+{
+    params.style = str;
+    border.setDashPattern(vector);
+    border.setDashOffset(offset);
 }
 
 void Scene::makeItemsControllable(bool areControllable)
@@ -196,7 +268,7 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event)
         addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
         undoStack->push(addCommand);
         this->addItem(lineItem);
-        lineItem->setPen(border,borderColor);
+        lineItem->setPen(border,params);
        // lineItem->setPen(QPen());
        // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
         lineItem->setPos(origPoint);

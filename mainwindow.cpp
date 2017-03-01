@@ -284,6 +284,23 @@ void MainWindow::createWidthBox()
     widthBox->setCurrentIndex(2);
 }
 
+void MainWindow::isSelectedUserItem(QString str)
+{
+    if(str!="user style")
+        emit changeStyleValue(str);
+    else if (str=="user style")
+    {
+        //TODO написать виджет для этого стиля, сигналы к нему и тд.
+
+
+    }
+    else
+    {
+        // на всяий случай, если выбралась та поизиция, кторой нет
+        Q_ASSERT(false);
+    }
+}
+
 void MainWindow::createColorToolBar()
 {
 
@@ -294,9 +311,32 @@ void MainWindow::createColorToolBar()
     createColorWidgets();
     createWidthBox();
 
+    styleBox = new QComboBox();
+    styleBox->setIconSize(QSize(126,15));
 
+    styleBox->addItem(QIcon(":/icons/style/solid.png"),                 "solid");
+    styleBox->addItem(QIcon(":/icons/style/dotted.png"),                "dotted");
+    styleBox->addItem(QIcon(":/icons/style/densely_dotted.png"),        "densely dotted");
+    styleBox->addItem(QIcon(":/icons/style/loosely_dotted.png"),        "loosely dotted");
+    styleBox->addItem(QIcon(":/icons/style/dashed.png"),                "dashed");
+    styleBox->addItem(QIcon(":/icons/style/densely_dashed.png"),        "densely dashed");
+    styleBox->addItem(QIcon(":/icons/style/loosely_dashed.png"),        "loosely dashed");
+    styleBox->addItem(QIcon(":/icons/style/dashdotted.png"),            "dashdotted");
+    styleBox->addItem(QIcon(":/icons/style/densely_dashdotted.png"),    "densely dashdotted");
+    styleBox->addItem(QIcon(":/icons/style/loosely_dashdotted.png"),    "loosely dashdotted");
+    styleBox->addItem(QIcon(":/icons/style/dashdotdotted.png"),         "dashdotdotted");
+    styleBox->addItem(QIcon(":/icons/style/densely_dashdotdotted.png"), "densely dashdotdotted");
+    styleBox->addItem(QIcon(":/icons/style/loosely_dashdotdotted.png"), "loosely dashdotdotted");
+
+
+    //userItem - отдельное поведение
+    styleBox->addItem("user style",true);
+
+    connect(styleBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(isSelectedUserItem(QString)));
+    connect(this,SIGNAL(changeStyleValue(QString)),scene,SLOT(setPenStyle(QString)));
 
 
     colorToolBar->addWidget(widthBox);
+    colorToolBar->addWidget(styleBox);
 
 }

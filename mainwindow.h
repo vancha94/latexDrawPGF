@@ -40,6 +40,7 @@ public slots:
     void textButtonClicked();
 signals:
     void changedWidthValue(qreal value);
+    void changeStyleValue(QString value);
 private:
     QGraphicsView* view;
     Scene* scene;
@@ -75,6 +76,7 @@ private:
 
 
     QComboBox *widthBox;
+    QComboBox *styleBox;
 
 
 private: //methods
@@ -91,6 +93,8 @@ private: //methods
 
    Q_SLOT void widthIndexToValue(int inedex);
     void createWidthBox();
+
+    Q_SLOT void isSelectedUserItem(QString str);
 };
 
 #endif // MAINWINDOW_H

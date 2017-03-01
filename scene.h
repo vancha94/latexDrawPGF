@@ -13,6 +13,7 @@
 #include <QUndoStack>
 #include <commands.h>
 #include <QUndoView>
+#include <paramslines.h>
 
 class Scene : public QGraphicsScene
 {
@@ -38,6 +39,8 @@ public Q_SLOTS:
     void setBacgroundAlpha(int value);
 
     void setPenWidth(qreal value);
+    void setPenStyle(QString str);
+    void setPenStyle(QString str, QVector<qreal> vector, qreal offset = 0);
 protected: //events
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -68,8 +71,14 @@ private:
     //color Properties
     QBrush background;
     QPen border;
-    QString backgroundColor;
-    QString borderColor;
+
+
+    //style properties
+    QHash<QString, QVector<qreal>> listOfLineStyles;
+
+
+    ParamLines params;
+
 
 
 
@@ -82,6 +91,8 @@ private: //methods
     void addCommandConnectSignal(AddCommand *addCommand);
     void addText(QGraphicsItem *item);
     void attachStrings();
+    void createLineStyles();
+    void addLineStyle(QString str, QPen tmpPen, qreal delta = 0);
 };
 
 #endif // SCENE_H
