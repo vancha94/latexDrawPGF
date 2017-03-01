@@ -26,14 +26,12 @@ void AbstractItem::setBorderColor(QString str)
 {
     // borderColor = str;
     borderColor = QString(str);
-    qDebug() <<str << borderColor;
 
 }
 
 void AbstractItem::setBackgroundColor(QString str)
 {
     backgroundColor = str;
-    qDebug() << str <<  backgroundColor;
 }
 
 void AbstractItem::setBorderAlpha(float value)

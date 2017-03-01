@@ -13,6 +13,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QComboBox>
+#include <userpenstyle.h>
 
 
 enum colorButtons
@@ -77,6 +78,10 @@ private:
 
     QComboBox *widthBox;
     QComboBox *styleBox;
+
+    UserPenStyle *usepPenStyle;
+
+
 
 
 private: //methods

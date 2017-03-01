@@ -13,28 +13,26 @@ MainWindow::MainWindow()
     dock = new QDockWidget(QString("Latex text"),this);
     dock->setAllowedAreas(Qt::RightDockWidgetArea);
 
-    // dock->setWindowFlags(Qt::WindowTitleHint);
-
     latexText = new LatexText(dock);
     dock->setWidget(latexText);
 
+    usepPenStyle = new UserPenStyle();
 
-    //   setLayout(horizontallLayout);
-    //  setCentralWidget(horizontallLayout);
+
+
+
 
     setCentralWidget(view);
     addDockWidget(Qt::RightDockWidgetArea,dock);
-    // setCentralWidget(latexText);
+
 
     createActions();
     createConnections();
     createDrawToolBar();
     createColorToolBar();
 
-
-    // colorWidget->show();
-
-
+    // test code
+    //usepPenStyle->show();
 
 
 }
@@ -291,7 +289,7 @@ void MainWindow::isSelectedUserItem(QString str)
     else if (str=="user style")
     {
         //TODO написать виджет для этого стиля, сигналы к нему и тд.
-
+        usepPenStyle->exec();
 
     }
     else

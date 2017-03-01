@@ -96,7 +96,7 @@ void Scene::addLineStyle(QString str, QPen pen, qreal delta)
 
     for (int i =1; i<tmpVector.size();i+=2)
         tmpVector[i]+=delta;
-
+#include <QGraphicsLineItem>
     // обработка ситуации для стиля solid
     // для данного стиля dashPattern() возвращает пустой список
     if (!tmpVector.size())

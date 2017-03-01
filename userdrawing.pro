@@ -8,7 +8,8 @@ SOURCES += \
     latextext.cpp \
     commands.cpp \
     colorlatexwidget.cpp \
-    abstractitem.cpp
+    abstractitem.cpp \
+    userpenstyle.cpp
 
 HEADERS += \
     scene.h \
@@ -18,7 +19,8 @@ HEADERS += \
     abstractitem.h \
     commands.h \
     colorlatexwidget.h \
-    paramslines.h
+    paramslines.h \
+    userpenstyle.h
 
 RESOURCES += \
     userdrawing.qrc
@@ -28,4 +30,5 @@ RESOURCES += \
 include(color_widgets.pri)
 
 FORMS += \
-    colorlatexwidget.ui
+    colorlatexwidget.ui \
+    userpenstyle.ui

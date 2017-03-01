@@ -84,7 +84,6 @@ void ColorLatexWidget::changeColor(QColor color)
 
     preview->setColor(color);
 
-    qDebug() << tmpStr;
     emit colorChanged(color,tmpStr);
 }
 
