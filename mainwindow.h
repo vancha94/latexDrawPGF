@@ -42,6 +42,8 @@ public slots:
 signals:
     void changedWidthValue(qreal value);
     void changeStyleValue(QString value);
+private Q_SLOTS:
+    void userStyleCanceled();
 private:
     QGraphicsView* view;
     Scene* scene;
@@ -79,7 +81,7 @@ private:
     QComboBox *widthBox;
     QComboBox *styleBox;
 
-    UserPenStyle *usepPenStyle;
+    UserPenStyle *userPenStyle;
 
 
 

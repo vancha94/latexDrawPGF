@@ -91,7 +91,7 @@ void UserPenStyle::okClickedSlot()
     QString offStr = " off ";
     for (int i =0;i<vector.size();++i)
     {
-        if (i%2!=0)
+        if (i%2==0)
             style+=onStr;
         else
         {
@@ -101,7 +101,7 @@ void UserPenStyle::okClickedSlot()
     }
     style+=", dash phase=";
     style+=QString::number(pen.dashOffset());
-    emit okClicked(style,vector);
+    emit okClicked(style,vector,pen.dashOffset());
 }
 
 

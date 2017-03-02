@@ -30,7 +30,7 @@ private:
     QString style;
 
 signals:
-    void okClicked(QString _style, QVector<qreal> _vector);
+    void okClicked(QString _style, QVector<qreal> _vector,qreal value);
     void canselClicked();
 private Q_SLOTS:
     void addElement();

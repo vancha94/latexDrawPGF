@@ -16,7 +16,7 @@ MainWindow::MainWindow()
     latexText = new LatexText(dock);
     dock->setWidget(latexText);
 
-    usepPenStyle = new UserPenStyle();
+    userPenStyle = new UserPenStyle();
 
 
 
@@ -41,6 +41,8 @@ MainWindow::~MainWindow()
 {
     delete scene;
     delete dock;
+    delete userPenStyle;
+    //delete
 }
 
 void MainWindow::createActions()
@@ -77,6 +79,11 @@ void MainWindow::createConnections()
     connect(drawActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(actionGroupClicked(QAction*)));
     connect(scene,&Scene::transmitText,latexText,&LatexText::addText);
+    connect(userPenStyle,SIGNAL(canselClicked()),this,SLOT(userStyleCanceled()));
+    connect(userPenStyle,SIGNAL(okClicked(QString,QVector<qreal>,qreal)),
+            scene,SLOT(setPenStyle(QString,QVector<qreal>,qreal)));
+
+
 
 
 }
@@ -172,6 +179,11 @@ void MainWindow::borderButtonClicked()
 void MainWindow::textButtonClicked()
 {
     clickedColorButton = colorButtons::TEXT;
+}
+
+void MainWindow::userStyleCanceled()
+{
+    styleBox->setCurrentIndex(0);
 }
 
 void MainWindow::createDrawToolBar()
@@ -289,7 +301,7 @@ void MainWindow::isSelectedUserItem(QString str)
     else if (str=="user style")
     {
         //TODO написать виджет для этого стиля, сигналы к нему и тд.
-        usepPenStyle->exec();
+        userPenStyle->exec();
 
     }
     else
