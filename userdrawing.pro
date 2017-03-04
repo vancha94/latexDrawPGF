@@ -9,7 +9,8 @@ SOURCES += \
     commands.cpp \
     colorlatexwidget.cpp \
     abstractitem.cpp \
-    userpenstyle.cpp
+    userpenstyle.cpp \
+    polylineitem.cpp
 
 HEADERS += \
     scene.h \
@@ -20,7 +21,8 @@ HEADERS += \
     commands.h \
     colorlatexwidget.h \
     paramslines.h \
-    userpenstyle.h
+    userpenstyle.h \
+    polylineitem.h
 
 RESOURCES += \
     userdrawing.qrc

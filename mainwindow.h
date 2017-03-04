@@ -53,6 +53,7 @@ private:
 
     QAction* lineAction;
     QAction* selectAction;
+    QAction* polylineAction;
     QActionGroup *drawActionGroup;
 
     QAction* undoAction;
@@ -91,6 +92,7 @@ private: //methods
     void createConnections();
     void createDrawToolBar();
     void createColorToolBar();
+    void createDrawAction(QAction* &action, QString name, QIcon icon,Scene::Mode _mode);
 
 
 
@@ -102,6 +104,8 @@ private: //methods
     void createWidthBox();
 
     Q_SLOT void isSelectedUserItem(QString str);
+    void creteStyleBox();
+    void addDrawActions();
 };
 
 #endif // MAINWINDOW_H

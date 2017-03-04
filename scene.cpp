@@ -18,11 +18,13 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     background.setColor(QColor("#ffffff"));
     params.backgroundCOlor="White";
 
+    firstClick = true;
+
     createLineStyles();
 
 
 
-     //test code
+    //test code
 
 
 
@@ -35,7 +37,8 @@ void Scene::setMode(Mode mode)
     sceneMode = mode;
     QGraphicsView::DragMode vMode =
             QGraphicsView::NoDrag;
-    if(mode == DrawLine)
+    if(mode == DrawLine ||
+            mode == DrawPolyLine)
     {
         makeItemsControllable(false);
         vMode = QGraphicsView::NoDrag;
@@ -46,6 +49,7 @@ void Scene::setMode(Mode mode)
         vMode = QGraphicsView::RubberBandDrag;
         //vMode = QGraphicsView::ScrollHandDrag;
     }
+
     QGraphicsView* mView = views().at(0);
     if(mView)
         mView->setDragMode(vMode);
@@ -53,10 +57,7 @@ void Scene::setMode(Mode mode)
 
 void Scene::undo()
 {
-    //Q_ASSERT(false);
     undoAction->trigger();
-
-    // qDebug() << 1;
 }
 
 void Scene::redo()
@@ -80,7 +81,7 @@ void Scene::attachStrings()
     foreach (QString str, textStack)
     {
         if(str!="")
-        tmpString+=str + "\n";
+            tmpString+=str + "\n";
     }
     emit transmitText(tmpString);
 }
@@ -241,7 +242,9 @@ void Scene::connectSignals()
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(sceneMode == DrawLine)
+    if(firstClick &&
+            sceneMode == DrawLine ||
+            sceneMode == DrawPolyLine)
         origPoint = event->scenePos();
 
     QGraphicsScene::mousePressEvent(event);
@@ -269,8 +272,8 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event)
         undoStack->push(addCommand);
         this->addItem(lineItem);
         lineItem->setPen(border,params);
-       // lineItem->setPen(QPen());
-       // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
+        // lineItem->setPen(QPen());
+        // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
         lineItem->setPos(origPoint);
 
     }
@@ -300,6 +303,13 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         addLine(addCommand, event);
 
     }
+    else if (sceneMode == DrawPolyLine)
+    {
+
+        qDebug() << sceneMode;
+
+    }
+
     if(sceneMode == SelectObject && !isMoveElemnts &&
             !selectedItems().isEmpty())
     {
@@ -353,7 +363,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         movingElementsEnd();
 
     }
-    //  lineItem = 0;
+
     QGraphicsScene::mouseReleaseEvent(event);
 }
 

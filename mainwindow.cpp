@@ -47,20 +47,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::createActions()
 {
-    lineAction = new QAction("Draw line", this);
-    lineAction->setData(int(Scene::DrawLine));
-    lineAction->setIcon(QIcon(":/icons/line.png"));
-    lineAction->setCheckable(true);
 
-    selectAction = new QAction("Select object", this);
-    selectAction->setData(int(Scene::SelectObject));
-    selectAction->setIcon(QIcon(":/icons/select.png"));
-    selectAction->setCheckable(true);
+
+    createDrawAction(lineAction,        "Draw line",       QIcon(":/icons/line.png"),    Scene::DrawLine);
+    createDrawAction(selectAction,      "Select object",   QIcon(":/icons/select.png"),  Scene::SelectObject);
+    createDrawAction(polylineAction,    "Draw PolyLine",   QIcon(":/icons/polyline.png"),Scene::DrawPolyLine);
+
+
+
 
     drawActionGroup = new QActionGroup(this);
     drawActionGroup->setExclusive(true);
     drawActionGroup->addAction(lineAction);
     drawActionGroup->addAction(selectAction);
+    drawActionGroup->addAction(polylineAction);
 
     undoAction = new QAction("Undo",this);
     undoAction->setIcon(QIcon(":/icons/undo.png"));
@@ -186,6 +186,13 @@ void MainWindow::userStyleCanceled()
     styleBox->setCurrentIndex(0);
 }
 
+void MainWindow::addDrawActions()
+{
+    drawingToolBar->addAction(selectAction);
+    drawingToolBar->addAction(lineAction);
+    drawingToolBar->addAction(polylineAction);
+}
+
 void MainWindow::createDrawToolBar()
 {
     drawingToolBar = new QToolBar;
@@ -196,8 +203,7 @@ void MainWindow::createDrawToolBar()
     drawingToolBar->addAction(redoAction);
     drawingToolBar->addSeparator();
 
-    drawingToolBar->addAction(selectAction);
-    drawingToolBar->addAction(lineAction);
+    addDrawActions();
 
 }
 
@@ -311,16 +317,8 @@ void MainWindow::isSelectedUserItem(QString str)
     }
 }
 
-void MainWindow::createColorToolBar()
+void MainWindow::creteStyleBox()
 {
-
-    colorToolBar = new QToolBar;
-    addToolBar(Qt::BottomToolBarArea,colorToolBar);
-    colorToolBar->setMovable(false);
-
-    createColorWidgets();
-    createWidthBox();
-
     styleBox = new QComboBox();
     styleBox->setIconSize(QSize(126,15));
 
@@ -344,9 +342,29 @@ void MainWindow::createColorToolBar()
 
     connect(styleBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(isSelectedUserItem(QString)));
     connect(this,SIGNAL(changeStyleValue(QString)),scene,SLOT(setPenStyle(QString)));
+}
+
+void MainWindow::createColorToolBar()
+{
+
+    colorToolBar = new QToolBar;
+    addToolBar(Qt::BottomToolBarArea,colorToolBar);
+    colorToolBar->setMovable(false);
+
+    createColorWidgets();
+    createWidthBox();
+    creteStyleBox();
 
 
     colorToolBar->addWidget(widthBox);
     colorToolBar->addWidget(styleBox);
 
+}
+
+void MainWindow::createDrawAction(QAction* &action, QString name, QIcon icon, Scene::Mode _mode)
+{
+    action = new QAction(name, this);
+    action->setData(int(_mode));
+    action->setIcon(icon);
+    action->setCheckable(true);
 }

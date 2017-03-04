@@ -24,5 +24,6 @@
         <file>icons/style/loosely_dotted.png</file>
         <file>icons/style/solid.png</file>
         <file>icons/style/densely_dashed.png</file>
+        <file>icons/polyline.png</file>
     </qresource>
 </RCC>

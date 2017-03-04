@@ -14,12 +14,13 @@
 #include <commands.h>
 #include <QUndoView>
 #include <paramslines.h>
+#include <polylineitem.h>
 
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    enum Mode {NoMode, SelectObject, DrawLine};
+    enum Mode {NoMode, SelectObject, DrawLine,DrawPolyLine};
     Scene(QObject* parent = 0);
 
     void setMode(Mode mode);
@@ -54,6 +55,9 @@ private:
     // draw properties
     QPointF origPoint;
     LineItem *lineItem;
+    PolyLineItem *polylineitem;
+    bool firstClick;
+
     QGraphicsItem *drawItem;
     QGraphicsLineItem* itemToDraw;
     // undo/redo properties
