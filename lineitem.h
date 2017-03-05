@@ -3,23 +3,22 @@
 
 #define private public
 #include <QGraphicsLineItem>
-#include "abstractitem.h"
+#include "abstractline.h"
 #undef private
 
-class LineItem: public AbstractItem, public QGraphicsLineItem
+class LineItem: public AbstractLine, public QGraphicsLineItem
 {
 public:
  //   LineItem();
     LineItem(QGraphicsLineItem* item=0);
-//    QRectF boundingRect();
-//    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
+
     virtual QString prepareText();
     void setPos(const QPointF &pos);// Q_DECL_OVERRIDE;
     void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
     void setVisible(bool visible);// Q_DECL_OVERRIDE;
     void setPen(const QPen &pen,ParamLines _params);
 protected:
-   virtual  QString paramToText();
+
 //    void setb
 //private: //methods
 public:

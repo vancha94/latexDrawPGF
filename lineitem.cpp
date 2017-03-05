@@ -3,7 +3,7 @@
 #include <QPen>
 
 LineItem::LineItem(QGraphicsLineItem* item):
-     AbstractItem(),QGraphicsLineItem(item)
+     AbstractLine(),QGraphicsLineItem(item)
 {
     setCooordinats();
 }
@@ -44,7 +44,6 @@ void LineItem::setLine(qreal x1, qreal y1, qreal x2, qreal y2)
     // qDebug() << scenePos() << scenePosition;
     QGraphicsLineItem::setLine(x1,y1,x2,y2);
     setCooordinats();
-   // qDebug() << scenePos() << scenePosition << points[0] << points[1];
 
 }
 
@@ -57,23 +56,11 @@ void LineItem::setVisible(bool visible)
 void LineItem::setPen(const QPen &pen, ParamLines _params)
 {
     QGraphicsLineItem::setPen(pen);
-    AbstractItem::setPen(pen,_params);
+    AbstractLine::setPen(pen,_params);
 
 
 }
 
-QString LineItem::paramToText()
-{
-
-        QString tmpStr="";
-
-        tmpStr+= backgroundColorToText() + ",";
-        tmpStr+= width +",";
-        tmpStr+=style;
-
-
-        return tmpStr;
-}
 
 void LineItem::setCooordinats()
 {

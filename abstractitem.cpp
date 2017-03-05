@@ -2,6 +2,11 @@
 
 
 
+ParamLines AbstractItem::getParams() const
+{
+    return params;
+}
+
 AbstractItem::AbstractItem()
 {
     setBorderColor("Black");
@@ -69,8 +74,10 @@ void AbstractItem::setPen(const QPen &pen, ParamLines _params)
     setWidth(pen.widthF());
     setAllvalues(_params);
 
-  //  setStyle();
+    //  setStyle();
 }
+
+
 
 QString AbstractItem::backgroundColorToText()
 {

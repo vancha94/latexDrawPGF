@@ -31,6 +31,8 @@ MainWindow::MainWindow()
     createDrawToolBar();
     createColorToolBar();
 
+
+    //view->setmo
     // test code
     //usepPenStyle->show();
 
@@ -51,7 +53,7 @@ void MainWindow::createActions()
 
     createDrawAction(lineAction,        "Draw line",       QIcon(":/icons/line.png"),    Scene::DrawLine);
     createDrawAction(selectAction,      "Select object",   QIcon(":/icons/select.png"),  Scene::SelectObject);
-    createDrawAction(polylineAction,    "Draw PolyLine",   QIcon(":/icons/polyline.png"),Scene::DrawPolyLine);
+    createDrawAction(polylineAction,    "Draw PolyLine",   QIcon(":/icons/polyline.png"),Scene::DrawPolyLine,true);
 
 
 
@@ -107,6 +109,7 @@ ColorLatexWidget* MainWindow::setWidgetPointner()
         return colorTextWidget;
         break;
     default:
+        return nullptr;
 
         break;
     }
@@ -192,6 +195,18 @@ void MainWindow::addDrawActions()
     drawingToolBar->addAction(lineAction);
     drawingToolBar->addAction(polylineAction);
 }
+
+void MainWindow::polyItem()
+{
+    view->setMouseTracking(true);
+}
+
+void MainWindow::notPolyItem()
+{
+    view->setMouseTracking(false);
+}
+
+
 
 void MainWindow::createDrawToolBar()
 {
@@ -361,10 +376,14 @@ void MainWindow::createColorToolBar()
 
 }
 
-void MainWindow::createDrawAction(QAction* &action, QString name, QIcon icon, Scene::Mode _mode)
+void MainWindow::createDrawAction(QAction* &action, QString name, QIcon icon, Scene::Mode _mode, bool isPoly)
 {
     action = new QAction(name, this);
     action->setData(int(_mode));
     action->setIcon(icon);
     action->setCheckable(true);
+    if(isPoly)
+        connect(action,SIGNAL(triggered(bool)),this,SLOT(polyItem()));
+    else
+        connect(action,SIGNAL(triggered(bool)),this,SLOT(notPolyItem()));
 }

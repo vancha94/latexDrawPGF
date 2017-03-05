@@ -89,7 +89,7 @@ private:
 private: //methods
     void makeItemsControllable(bool areControllable);
     void connectSignals();
-    void addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
+    void addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event, bool isPoly=false);
     void movingElementsEnd();
     void movingsElementsStart();
     void addCommandConnectSignal(AddCommand *addCommand);
@@ -97,6 +97,8 @@ private: //methods
     void attachStrings();
     void createLineStyles();
     void addLineStyle(QString str, QPen tmpPen, qreal delta = 0);
+    void addUndo(QUndoCommand *addCommand);
+    void setNewItemParams(QGraphicsItem* item);
 };
 
 #endif // SCENE_H

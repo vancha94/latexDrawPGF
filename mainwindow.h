@@ -92,7 +92,8 @@ private: //methods
     void createConnections();
     void createDrawToolBar();
     void createColorToolBar();
-    void createDrawAction(QAction* &action, QString name, QIcon icon,Scene::Mode _mode);
+    void createDrawAction(QAction* &action, QString name, QIcon icon, Scene::Mode _mode,bool isPoly = false);
+
 
 
 
@@ -106,6 +107,9 @@ private: //methods
     Q_SLOT void isSelectedUserItem(QString str);
     void creteStyleBox();
     void addDrawActions();
+    Q_SLOT void polyItem();
+    Q_SLOT void notPolyItem();
+
 };
 
 #endif // MAINWINDOW_H
