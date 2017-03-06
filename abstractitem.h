@@ -54,9 +54,11 @@ public:
 
     QString getStyle() const;
 
-    void setAllValues(ParamLines _params);
+    //void setAllValues(ParamLines _params);
 
     ParamLines getParams() const;
+
+    void setParams(const ParamLines &value);
 
 protected: //metods
     // в подготовке текста вызывать данный метод только в таков виде
@@ -67,7 +69,7 @@ private:
 
     void fillHash();
 
-    void setAllvalues(ParamLines _params);
+    void setAllValues(ParamLines _params);
 };
 
 #endif // ABSTRACTITEM_H

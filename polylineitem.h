@@ -21,10 +21,12 @@ public:
     void addItem(LineItem* item);
     void addToGroup(LineItem *item);
     //void setPen(const QPen &pen, ParamLines _params);
+    void setParams(const ParamLines &value);
 
 protected:
     QVector<LineItem*> lines;
    // QVector<QPointF> points;
+
 
 protected: //methods
     virtual QString paramToText() Q_DECL_OVERRIDE;

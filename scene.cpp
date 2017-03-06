@@ -303,6 +303,10 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event,bo
 
         lineItem = new LineItem();
         lineItem->setBorderAlpha(border.color().alphaF()*100);
+        lineItem->setPen(border,params);
+        // lineItem->setPen(QPen());
+        // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
+        lineItem->setPos(origPoint);
         if(!isPoly)
         {
             addCommand = new AddCommand(lineItem);
@@ -314,10 +318,7 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event,bo
             polylineitem->addToGroup(lineItem);
 
 
-        lineItem->setPen(border,params);
-        // lineItem->setPen(QPen());
-        // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
-        lineItem->setPos(origPoint);
+
 
     }
     lineItem->setLine(0,0,

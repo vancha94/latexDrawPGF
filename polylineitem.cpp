@@ -72,8 +72,16 @@ void PolyLineItem::addToGroup(LineItem *item)
     points.push_back(item->line().p1());
     points.push_back(item->line().p2());
     //TODO: наладить нормальную взятие параметров (а то что-то не так)
-    params = item->getParams();
+    setParams(item->getParams());
+    setPen(item->pen(),getParams());
+   // params = item->getParams();
 
+}
+
+void PolyLineItem::setParams(const ParamLines &value)
+{
+    AbstractLine::setParams(value);
+    params = value;
 }
 
 //void PolyLineItem::setPen(const QPen &pen, ParamLines _params)

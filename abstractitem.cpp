@@ -7,6 +7,13 @@ ParamLines AbstractItem::getParams() const
     return params;
 }
 
+void AbstractItem::setParams(const ParamLines &value)
+{
+    params = value;
+    setAllValues(params);
+   // setAllValues(params);
+}
+
 AbstractItem::AbstractItem()
 {
     setBorderColor("Black");
@@ -59,7 +66,7 @@ void AbstractItem::setStyle(QString str)
     style = str;
 }
 
-void AbstractItem::setAllvalues(ParamLines _params)
+void AbstractItem::setAllValues(ParamLines _params)
 {
     params = _params;
 
@@ -72,7 +79,8 @@ void AbstractItem::setPen(const QPen &pen, ParamLines _params)
 {
     setBorderColor(_params.borderColor);
     setWidth(pen.widthF());
-    setAllvalues(_params);
+    setBorderAlpha(pen.color().alphaF()*100);
+    setAllValues(_params);
 
     //  setStyle();
 }
