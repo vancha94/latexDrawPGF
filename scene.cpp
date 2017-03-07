@@ -7,6 +7,7 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     sceneMode = NoMode;
     lineItem = 0;
     drawItem = 0;
+    polylineitem = 0;
     undoStack = new QUndoStack(this);
     undoAction = undoStack->createUndoAction(this);
     redoAction = undoStack->createRedoAction(this);
@@ -45,7 +46,7 @@ void Scene::setMode(Mode mode)
     else if(mode == SelectObject)
     {
         makeItemsControllable(true);
-        vMode = QGraphicsView::RubberBandDrag;
+         vMode = QGraphicsView::RubberBandDrag;
         //vMode = QGraphicsView::ScrollHandDrag;
     }
 
@@ -235,6 +236,7 @@ void Scene::makeItemsControllable(bool areControllable)
                       areControllable);
         item->setFlag(QGraphicsItem::ItemIsMovable,
                       areControllable);
+
     }
 }
 
@@ -274,6 +276,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             {
                 firstClick = true;
                 pushStack(polylineitem);
+               // polylineitem->setSelected(true);
                 polylineitem = 0;
             }
             origPoint = event->scenePos();
