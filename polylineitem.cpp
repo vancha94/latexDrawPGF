@@ -20,6 +20,17 @@ QString PolyLineItem::prepareText()
        // TODO: дописать преобразование координат
        tmpStr = "\\draw";
        tmpStr+="["+paramToText() +"]";
+       tmpStr+=" (" + QString::number(scenePosition.x())+",";
+       tmpStr+=QString::number(-scenePosition.y())+") ";
+      // if(points.size())
+       {
+           for(int i=0; i<points.size();++i)
+           {
+               tmpStr += "-- ++("+ QString::number(points[i].x()) + ",";
+               tmpStr += QString::number(-points[i].y()) + ")";
+           }
+           tmpStr +=";";
+       }
    }
    return tmpStr;
 }
@@ -27,20 +38,20 @@ QString PolyLineItem::prepareText()
 void PolyLineItem::setCooordinats()
 {
     setScenePosition(scenePos());
-    auto tmpList = childItems();
-    if(points.length())
+    if(points.size())
     {
         points.clear();
     }
-    for(int i=0;i<tmpList.length();++i)
+    for(int i=0;i<lines.size();i++)
     {
-       auto tmpLine = dynamic_cast<LineItem*>(tmpList[i]);
-       points << tmpLine->line().p1();
-        //points << tmpList[i]->
+        QPointF tmpPoint;
+        int j = i;
+        tmpPoint.setX(lines[i]->line().dx());
+        tmpPoint.setY(lines[i]->line().dy());
+        points.push_back(tmpPoint);
     }
-    auto tmpSize = tmpList.size();
-    points << dynamic_cast<LineItem*>(tmpList[tmpSize-1])->line().p2();
     isVis = isVisible();
+
 
 
 }
@@ -74,6 +85,7 @@ void PolyLineItem::addToGroup(LineItem *item)
     //TODO: наладить нормальную взятие параметров (а то что-то не так)
     setParams(item->getParams());
     setPen(item->pen(),getParams());
+    lines.push_back(item);
    // params = item->getParams();
 
 }
