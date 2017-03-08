@@ -267,10 +267,11 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
             undoStack->push(addCommand);
             this->addItem(polylineitem);
+            addLine(addCommand,event,true);
         }
         else if (!firstClick)
         {
-
+            polylineitem->drawOneLine(true);
             lineItem = 0;
             if(event->button() == Qt::RightButton)
             {
@@ -351,13 +352,17 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             event->buttons() & Qt::LeftButton)
     {
 
-        addLine(addCommand, event);
+       addLine(addCommand, event);
 
     }
     else if (sceneMode == DrawPolyLine)
     {
         if(!firstClick)
-            addLine(addCommand,event,true);
+        {
+            addLine(nullptr,event,true);
+            polylineitem->drawOneLine();
+
+        }
     }
 
     if(sceneMode == SelectObject && !isMoveElemnts &&

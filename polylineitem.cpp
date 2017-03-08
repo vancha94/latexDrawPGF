@@ -1,10 +1,12 @@
 #include "polylineitem.h"
 #include <qpainter.h>
 
-PolyLineItem::PolyLineItem(QGraphicsItemGroup *lineItem)
-    :AbstractLine(), QGraphicsItemGroup(lineItem)
+PolyLineItem::PolyLineItem(QGraphicsPathItem *lineItem)
+    :AbstractLine(), QGraphicsPathItem(lineItem)
 {
-
+    //    QBrush tmpBrush;
+    //    tmpBrush.set
+    i=0;
 }
 
 PolyLineItem::~PolyLineItem()
@@ -14,25 +16,24 @@ PolyLineItem::~PolyLineItem()
 
 QString PolyLineItem::prepareText()
 {
-   QString tmpStr="";
-   if(isVis)
-   {
-       // TODO: дописать преобразование координат
-       tmpStr = "\\draw";
-       tmpStr+="["+paramToText() +"]";
-       tmpStr+=" (" + QString::number(scenePosition.x())+",";
-       tmpStr+=QString::number(-scenePosition.y())+") ";
-      // if(points.size())
-       {
-           for(int i=0; i<points.size();++i)
-           {
-               tmpStr += "-- ++("+ QString::number(points[i].x()) + ",";
-               tmpStr += QString::number(-points[i].y()) + ")";
-           }
-           tmpStr +=";";
-       }
-   }
-   return tmpStr;
+    QString tmpStr="";
+    if(isVis)
+    {
+
+        tmpStr = "\\draw";
+        tmpStr+="["+paramToText() +"]";
+        tmpStr+=" (" + QString::number(scenePosition.x())+",";
+        tmpStr+=QString::number(-scenePosition.y())+") ";
+        {
+            for(int i=0; i<points.size();++i)
+            {
+                tmpStr += "-- ++("+ QString::number(points[i].x()) + ",";
+                tmpStr += QString::number(-points[i].y()) + ")";
+            }
+            tmpStr +=";";
+        }
+    }
+    return tmpStr;
 }
 
 void PolyLineItem::setCooordinats()
@@ -45,7 +46,7 @@ void PolyLineItem::setCooordinats()
     for(int i=0;i<lines.size();i++)
     {
         QPointF tmpPoint;
-        int j = i;
+        //int j = i;
         tmpPoint.setX(lines[i]->line().dx());
         tmpPoint.setY(lines[i]->line().dy());
         points.push_back(tmpPoint);
@@ -58,35 +59,29 @@ void PolyLineItem::setCooordinats()
 
 void PolyLineItem::setVisible(bool visible)
 {
-    QGraphicsItemGroup::setVisible(visible);
+    QGraphicsPathItem::setVisible(visible);
     setCooordinats();
 }
 
 void PolyLineItem::setPos(const QPointF &pos)
 {
-    QGraphicsItemGroup::setPos(pos);
+    QGraphicsPathItem::setPos(pos);
     setCooordinats();
 }
 
-void PolyLineItem::addItem(LineItem *item)
-{
-    lines.push_back(item);
-     restorePoints();
-     //paint();
-}
+
 
 void PolyLineItem::addToGroup(LineItem *item)
 {
-    QGraphicsItemGroup::addToGroup(item);
-    if(points.size()!=0)
-        points.remove(points.size()-1);
-    points.push_back(item->line().p1());
-    points.push_back(item->line().p2());
-    //TODO: наладить нормальную взятие параметров (а то что-то не так)
+    // QGraphicsItemGroup::addToGroup(item);
+    if(points.size()==0)
+        setPos(item->scenePos());
+
+
     setParams(item->getParams());
     setPen(item->pen(),getParams());
     lines.push_back(item);
-   // params = item->getParams();
+    setPath(_path);
 
 }
 
@@ -94,6 +89,56 @@ void PolyLineItem::setParams(const ParamLines &value)
 {
     AbstractLine::setParams(value);
     params = value;
+}
+
+void PolyLineItem::setPen(const QPen &pen, ParamLines _params)
+{
+    QGraphicsPathItem::setPen(pen);
+    AbstractItem::setPen(pen,_params);
+}
+
+void PolyLineItem::drawOneLine(bool isEnd)
+{
+    // TODO: додумать, что тут писать
+    QPainterPath tmpPath;
+
+    //currentPositionPath = tmpPath.currentPosition();
+    if(!_path.isEmpty())
+    {
+        tmpPath = _path;
+        tmpPath.moveTo(currentPositionPath);
+    }
+    if(lines.size())
+    {
+        auto tmpIndex = lines.size()-1;
+       // qDebug() << lines[tmpIndex]->line();
+        auto tmpLine = lines[tmpIndex]->line();
+        tmpPath.lineTo(tmpLine.dx(),tmpLine.dy());
+        qDebug() << tmpPath;
+        qDebug() << i;
+
+
+        if(isEnd)
+        {
+
+            //_path.moveTo(-currentPositionPath);
+            _path.lineTo(tmpLine.dx(),tmpLine.dy());
+            currentPositionPath = _path.currentPosition();
+            //_path = tmpPath;
+          //   setPath(_path);
+             _path.closeSubpath();
+             qDebug() << "end"<< tmpPath;
+             ++i;
+             return;
+        }
+        if(i==0)
+        {
+           setPath(tmpPath);
+           qDebug() << i;
+        }
+    }
+
+
 }
 
 //void PolyLineItem::setPen(const QPen &pen, ParamLines _params)
@@ -110,15 +155,5 @@ QString PolyLineItem::paramToText()
 
 
 
-void PolyLineItem::restorePoints()
-{
 
-    if(points.size()!=0)
-        points.remove(points.size()-1);
-    auto sizeLines = lines.size()-1;
-    points.push_back(lines[sizeLines]->line().p1());
-    points.push_back(lines[sizeLines]->line().p2());
-
-
-}
 
