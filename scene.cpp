@@ -24,9 +24,17 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     createLineStyles();
 
 
+
+
     //test code
 
+//    QPolygonF Triangle;
+//    Triangle.append(QPointF(-100.,0));
+//    Triangle.append(QPointF(0.,-100));
+//    Triangle.append(QPointF(100.,0));
+//    Triangle.append(QPointF(-55.,55));
 
+//    this->addPolygon(Triangle);
 
 
 

@@ -6,7 +6,6 @@ PolyLineItem::PolyLineItem(QGraphicsPathItem *lineItem)
 {
     //    QBrush tmpBrush;
     //    tmpBrush.set
-    i=0;
 }
 
 PolyLineItem::~PolyLineItem()
@@ -101,41 +100,41 @@ void PolyLineItem::drawOneLine(bool isEnd)
 {
     // TODO: додумать, что тут писать
     QPainterPath tmpPath;
+    QPointF currentPositionPath;
 
     //currentPositionPath = tmpPath.currentPosition();
-    if(!_path.isEmpty())
-    {
+  // if(!_path.isEmpty())
+    //{
         tmpPath = _path;
-        tmpPath.moveTo(currentPositionPath);
-    }
+        currentPositionPath =tmpPath.currentPosition();
+       // tmpPath.moveTo(currentPositionPath);
+    //}
     if(lines.size())
     {
         auto tmpIndex = lines.size()-1;
        // qDebug() << lines[tmpIndex]->line();
         auto tmpLine = lines[tmpIndex]->line();
-        tmpPath.lineTo(tmpLine.dx(),tmpLine.dy());
+        QPointF tmpPoint = QPointF(tmpLine.dx(),tmpLine.dy());
+        tmpPath.lineTo(currentPositionPath+tmpPoint);;
         qDebug() << tmpPath;
-        qDebug() << i;
+        qDebug() << currentPositionPath;
 
 
         if(isEnd)
         {
 
             //_path.moveTo(-currentPositionPath);
-            _path.lineTo(tmpLine.dx(),tmpLine.dy());
-            currentPositionPath = _path.currentPosition();
-            //_path = tmpPath;
+           // _path.lineTo(tmpLine.dx(),tmpLine.dy());
+           // currentPositionPath = _path.currentPosition();
+            _path = tmpPath;
           //   setPath(_path);
-             _path.closeSubpath();
+            // _path.closeSubpath();
              qDebug() << "end"<< tmpPath;
-             ++i;
              return;
         }
-        if(i==0)
-        {
+
            setPath(tmpPath);
-           qDebug() << i;
-        }
+
     }
 
 

@@ -29,10 +29,10 @@ public:
 protected:
     QVector<LineItem*> lines;
     QPainterPath _path;
-    QPointF currentPositionPath;
+
    // QVector<QPointF> points;
     //tmp
-    int i ;
+
 
 
 protected: //methods
