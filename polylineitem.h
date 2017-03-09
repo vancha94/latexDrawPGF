@@ -37,6 +37,8 @@ protected:
 
 protected: //methods
     virtual QString paramToText() Q_DECL_OVERRIDE;
+    bool isFirstLine;
+    QPointF scenPosTmp;
 
 
     //virtual void paint();

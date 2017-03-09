@@ -4,8 +4,7 @@
 PolyLineItem::PolyLineItem(QGraphicsPathItem *lineItem)
     :AbstractLine(), QGraphicsPathItem(lineItem)
 {
-    //    QBrush tmpBrush;
-    //    tmpBrush.set
+    isFirstLine = true;
 }
 
 PolyLineItem::~PolyLineItem()
@@ -45,7 +44,6 @@ void PolyLineItem::setCooordinats()
     for(int i=0;i<lines.size();i++)
     {
         QPointF tmpPoint;
-        //int j = i;
         tmpPoint.setX(lines[i]->line().dx());
         tmpPoint.setY(lines[i]->line().dy());
         points.push_back(tmpPoint);
@@ -72,7 +70,6 @@ void PolyLineItem::setPos(const QPointF &pos)
 
 void PolyLineItem::addToGroup(LineItem *item)
 {
-    // QGraphicsItemGroup::addToGroup(item);
     if(points.size()==0)
         setPos(item->scenePos());
 
@@ -98,43 +95,30 @@ void PolyLineItem::setPen(const QPen &pen, ParamLines _params)
 
 void PolyLineItem::drawOneLine(bool isEnd)
 {
-    // TODO: додумать, что тут писать
     QPainterPath tmpPath;
     QPointF currentPositionPath;
-
-    //currentPositionPath = tmpPath.currentPosition();
-  // if(!_path.isEmpty())
-    //{
+    if(isFirstLine)
+        scenPosTmp = scenePos();
+   if(!_path.isEmpty())
+    {
         tmpPath = _path;
         currentPositionPath =tmpPath.currentPosition();
-       // tmpPath.moveTo(currentPositionPath);
-    //}
+    }
+   //  костыль для решения бага с измнением позиции сцены при рисовании второй линии
+    setPos(scenPosTmp);
     if(lines.size())
     {
         auto tmpIndex = lines.size()-1;
-       // qDebug() << lines[tmpIndex]->line();
         auto tmpLine = lines[tmpIndex]->line();
         QPointF tmpPoint = QPointF(tmpLine.dx(),tmpLine.dy());
         tmpPath.lineTo(currentPositionPath+tmpPoint);;
-        qDebug() << tmpPath;
-        qDebug() << currentPositionPath;
-
-
         if(isEnd)
         {
-
-            //_path.moveTo(-currentPositionPath);
-           // _path.lineTo(tmpLine.dx(),tmpLine.dy());
-           // currentPositionPath = _path.currentPosition();
             _path = tmpPath;
-          //   setPath(_path);
-            // _path.closeSubpath();
-             qDebug() << "end"<< tmpPath;
+           // setPath(_path);
              return;
         }
-
            setPath(tmpPath);
-
     }
 
 
