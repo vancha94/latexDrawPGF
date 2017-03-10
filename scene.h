@@ -42,6 +42,8 @@ public Q_SLOTS:
     void setPenWidth(qreal value);
     void setPenStyle(QString str);
     void setPenStyle(QString str, QVector<qreal> vector, qreal offset = 0);
+
+    void setJointStyle(QString value, Qt::PenJoinStyle style);
 protected: //events
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

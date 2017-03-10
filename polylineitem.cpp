@@ -5,6 +5,7 @@ PolyLineItem::PolyLineItem(QGraphicsPathItem *lineItem)
     :AbstractLine(), QGraphicsPathItem(lineItem)
 {
     isFirstLine = true;
+    params.jointStyle = "miter";
 }
 
 PolyLineItem::~PolyLineItem()
@@ -97,15 +98,16 @@ void PolyLineItem::drawOneLine(bool isEnd)
 {
     QPainterPath tmpPath;
     QPointF currentPositionPath;
-    if(isFirstLine)
+       //  костыль для решения бага с измнением позиции сцены при рисовании второй линии
+    if(_path.isEmpty())
         scenPosTmp = scenePos();
+    else if(_path.elementCount()==2)
+         setPos(scenPosTmp);
    if(!_path.isEmpty())
     {
         tmpPath = _path;
         currentPositionPath =tmpPath.currentPosition();
     }
-   //  костыль для решения бага с измнением позиции сцены при рисовании второй линии
-    setPos(scenPosTmp);
     if(lines.size())
     {
         auto tmpIndex = lines.size()-1;
@@ -114,8 +116,13 @@ void PolyLineItem::drawOneLine(bool isEnd)
         tmpPath.lineTo(currentPositionPath+tmpPoint);;
         if(isEnd)
         {
+            QPainterPath::Element pathElement;
+            if(!_path.isEmpty())
+              pathElement = _path.elementAt(_path.elementCount());
+            auto tmpElement = tmpPath.elementAt(tmpPath.elementCount());
+            if(pathElement!=tmpElement)
             _path = tmpPath;
-           // setPath(_path);
+            setPath(_path);
              return;
         }
            setPath(tmpPath);
@@ -124,16 +131,12 @@ void PolyLineItem::drawOneLine(bool isEnd)
 
 }
 
-//void PolyLineItem::setPen(const QPen &pen, ParamLines _params)
-//{
-//    //QGraphicsItemGroup::setP
-//}
 
 QString PolyLineItem::paramToText()
 {
     //TODO: добавить необходимые параметры полиллинии
-    QString tmpStr ="";
-    return  AbstractLine::paramToText() + tmpStr;
+    QString tmpStr ="line join="+params.jointStyle+",";
+    return  tmpStr+ AbstractLine::paramToText() ;
 }
 
 

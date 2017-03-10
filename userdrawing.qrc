@@ -25,5 +25,8 @@
         <file>icons/style/solid.png</file>
         <file>icons/style/densely_dashed.png</file>
         <file>icons/polyline.png</file>
+        <file>icons/joint/bevel.png</file>
+        <file>icons/joint/miter.png</file>
+        <file>icons/joint/round.png</file>
     </qresource>
 </RCC>

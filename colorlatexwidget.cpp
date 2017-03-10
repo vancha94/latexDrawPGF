@@ -46,35 +46,6 @@ void ColorLatexWidget::changePalette(int saturation)
 
     preview->setColor(tmpColor);
     emit saturationChanged(saturation);;
-    //    auto colors = palette.colors();
-    //    QVector<QPair<QColor,QString>> tmpVect;
-
-
-
-    //    for (int i =0;i<colors.size();++i)
-    //    {
-    //        QColor color;
-    //        auto tmpColor = colors[i].first;
-    //       auto tmpString = colors[i].second;
-    //       int h = tmpColor.hue();
-    //       int v = tmpColor.value();
-    //       int s = tmpColor.saturation();
-    //       int a = tmpColor.alpha();
-    //       color.setHsv(h,s,v,saturation);
-    //       tmpVect.append(QPair<QColor,QString>(color,tmpString));
-    //        //        int h = colorItem.first.hue();
-    //        //        int v = colorItem.first.value();
-    //        //        colorItem.first.setHsl(h,saturation,v);
-    //    }
-    //    palette.setColors(tmpVect);
-    //   // palette.colorsChanged(tmpVect);
-    //    paletteModel->updatePalette(0,palette);
-
-    //    //colorWidget->set;
-    //    colorWidget->setModel(paletteModel);
-    //    colorWidget->update();
-    //    qDebug() << preview->geometry();
-
 }
 
 void ColorLatexWidget::changeColor(QColor color)

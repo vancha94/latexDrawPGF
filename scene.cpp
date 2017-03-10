@@ -236,6 +236,12 @@ void Scene::setPenStyle(QString str, QVector<qreal> vector, qreal offset)
     border.setDashOffset(offset);
 }
 
+void Scene::setJointStyle(QString value, Qt::PenJoinStyle style)
+{
+    border.setJoinStyle(style);
+    params.jointStyle = value;
+}
+
 void Scene::makeItemsControllable(bool areControllable)
 {
     foreach(QGraphicsItem* item, items())

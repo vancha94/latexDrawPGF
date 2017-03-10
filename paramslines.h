@@ -9,6 +9,8 @@ struct ParamLines
     QString borderColor;
 
     QString style;
+
+    QString jointStyle;
 };
 
 #endif // PARAMSLINES_H

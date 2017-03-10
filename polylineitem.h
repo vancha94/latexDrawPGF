@@ -39,6 +39,7 @@ protected: //methods
     virtual QString paramToText() Q_DECL_OVERRIDE;
     bool isFirstLine;
     QPointF scenPosTmp;
+    QString jointStyle;
 
 
     //virtual void paint();

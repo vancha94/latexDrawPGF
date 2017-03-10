@@ -42,6 +42,7 @@ public slots:
 signals:
     void changedWidthValue(qreal value);
     void changeStyleValue(QString value);
+    void changeJointValue(QString value, Qt::PenJoinStyle style);
 private Q_SLOTS:
     void userStyleCanceled();
 private:
@@ -81,6 +82,7 @@ private:
 
     QComboBox *widthBox;
     QComboBox *styleBox;
+    QComboBox *jointBox;
 
     UserPenStyle *userPenStyle;
 
@@ -105,11 +107,14 @@ private: //methods
     void createWidthBox();
 
     Q_SLOT void isSelectedUserItem(QString str);
-    void creteStyleBox();
+    void createStyleBox();
     void addDrawActions();
     Q_SLOT void polyItem();
     Q_SLOT void notPolyItem();
 
+    Q_SLOT void jointToValue(int index);
+
+    void createJointBox();
 };
 
 #endif // MAINWINDOW_H

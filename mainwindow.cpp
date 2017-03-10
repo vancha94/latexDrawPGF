@@ -206,6 +206,13 @@ void MainWindow::notPolyItem()
     view->setMouseTracking(false);
 }
 
+void MainWindow::jointToValue(int index)
+{
+    QString value = jointBox->itemText(index);
+    Qt::PenJoinStyle style = qvariant_cast<Qt::PenJoinStyle>(jointBox->itemData(index));
+    emit changeJointValue(value,style);
+}
+
 
 
 void MainWindow::createDrawToolBar()
@@ -332,7 +339,7 @@ void MainWindow::isSelectedUserItem(QString str)
     }
 }
 
-void MainWindow::creteStyleBox()
+void MainWindow::createStyleBox()
 {
     styleBox = new QComboBox();
     styleBox->setIconSize(QSize(126,15));
@@ -359,6 +366,22 @@ void MainWindow::creteStyleBox()
     connect(this,SIGNAL(changeStyleValue(QString)),scene,SLOT(setPenStyle(QString)));
 }
 
+void MainWindow::createJointBox()
+{
+    jointBox = new QComboBox();
+    jointBox->setIconSize(QSize(15,15));
+
+
+    jointBox->addItem(QIcon(":/icons/joint/bevel.png"),"bevel",Qt::BevelJoin);
+    jointBox->addItem(QIcon(":/icons/joint/miter.png"),"miter",Qt::MiterJoin);
+    jointBox->addItem(QIcon(":/icons/joint/round.png"),"round",Qt::RoundJoin);
+
+    connect(jointBox,SIGNAL(currentIndexChanged(int)),this,SLOT(jointToValue(int)));
+    connect(this,SIGNAL(changeJointValue(QString,Qt::PenJoinStyle)),scene,SLOT(setJointStyle(QString,Qt::PenJoinStyle)));
+
+    jointBox->setCurrentIndex(1);
+}
+
 void MainWindow::createColorToolBar()
 {
 
@@ -368,11 +391,13 @@ void MainWindow::createColorToolBar()
 
     createColorWidgets();
     createWidthBox();
-    creteStyleBox();
+    createStyleBox();
+    createJointBox();
 
 
     colorToolBar->addWidget(widthBox);
     colorToolBar->addWidget(styleBox);
+    colorToolBar->addWidget(jointBox);
 
 }
 
