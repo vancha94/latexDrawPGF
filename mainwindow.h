@@ -55,6 +55,7 @@ private:
     QAction* lineAction;
     QAction* selectAction;
     QAction* polylineAction;
+    QAction* pencilAction;
     QActionGroup *drawActionGroup;
 
     QAction* undoAction;

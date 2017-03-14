@@ -28,5 +28,6 @@
         <file>icons/joint/bevel.png</file>
         <file>icons/joint/miter.png</file>
         <file>icons/joint/round.png</file>
+        <file>icons/pencil.png</file>
     </qresource>
 </RCC>

@@ -20,7 +20,8 @@ class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    enum Mode {NoMode, SelectObject, DrawLine,DrawPolyLine};
+    enum Mode {NoMode, SelectObject, DrawLine,DrawPolyLine,
+              DrawPencil};
     Scene(QObject* parent = 0);
 
     void setMode(Mode mode);

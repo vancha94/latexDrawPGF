@@ -18,24 +18,14 @@ MainWindow::MainWindow()
 
     userPenStyle = new UserPenStyle();
 
-
-
-
-
     setCentralWidget(view);
     addDockWidget(Qt::RightDockWidgetArea,dock);
 
-
-    createActions();
-    createConnections();
     createDrawToolBar();
     createColorToolBar();
+    createConnections();
 
-
-    //view->setmo
     // test code
-    //usepPenStyle->show();
-
 
 }
 
@@ -50,30 +40,25 @@ MainWindow::~MainWindow()
 void MainWindow::createActions()
 {
 
-
-    createDrawAction(lineAction,        "Draw line",       QIcon(":/icons/line.png"),    Scene::DrawLine);
-    createDrawAction(selectAction,      "Select object",   QIcon(":/icons/select.png"),  Scene::SelectObject);
-    createDrawAction(polylineAction,    "Draw PolyLine",   QIcon(":/icons/polyline.png"),Scene::DrawPolyLine,true);
-
-
-
-
     drawActionGroup = new QActionGroup(this);
     drawActionGroup->setExclusive(true);
-    drawActionGroup->addAction(lineAction);
-    drawActionGroup->addAction(selectAction);
-    drawActionGroup->addAction(polylineAction);
 
     undoAction = new QAction("Undo",this);
     undoAction->setIcon(QIcon(":/icons/undo.png"));
     connect(undoAction,&QAction::triggered,scene,&Scene::undo);
 
-
     redoAction = new QAction("Redo", this);
     redoAction->setIcon(QIcon(":/icons/redo.png"));
     connect(redoAction,&QAction::triggered,scene,&Scene::redo);
 
+    drawingToolBar->addAction(undoAction);
+    drawingToolBar->addAction(redoAction);
+    drawingToolBar->addSeparator();
 
+    createDrawAction(lineAction,        "Draw line",       QIcon(":/icons/line.png"),    Scene::DrawLine);
+    createDrawAction(selectAction,      "Select object",   QIcon(":/icons/select.png"),  Scene::SelectObject);
+    createDrawAction(polylineAction,    "Draw PolyLine",   QIcon(":/icons/polyline.png"),Scene::DrawPolyLine,true);
+    createDrawAction(pencilAction,      "Draw PolyLine",   QIcon(":/icons/pencil.png"),  Scene::DrawPencil);
 }
 
 void MainWindow::createConnections()
@@ -84,10 +69,6 @@ void MainWindow::createConnections()
     connect(userPenStyle,SIGNAL(canselClicked()),this,SLOT(userStyleCanceled()));
     connect(userPenStyle,SIGNAL(okClicked(QString,QVector<qreal>,qreal)),
             scene,SLOT(setPenStyle(QString,QVector<qreal>,qreal)));
-
-
-
-
 }
 
 void MainWindow::actionGroupClicked(QAction *action)
@@ -194,6 +175,7 @@ void MainWindow::addDrawActions()
     drawingToolBar->addAction(selectAction);
     drawingToolBar->addAction(lineAction);
     drawingToolBar->addAction(polylineAction);
+    drawingToolBar->addAction(pencilAction);
 }
 
 void MainWindow::polyItem()
@@ -213,19 +195,13 @@ void MainWindow::jointToValue(int index)
     emit changeJointValue(value,style);
 }
 
-
-
 void MainWindow::createDrawToolBar()
 {
     drawingToolBar = new QToolBar;
     addToolBar(Qt::TopToolBarArea, drawingToolBar);
     drawingToolBar->setMovable(false);
+    createActions();
 
-    drawingToolBar->addAction(undoAction);
-    drawingToolBar->addAction(redoAction);
-    drawingToolBar->addSeparator();
-
-    addDrawActions();
 
 }
 
@@ -245,9 +221,6 @@ void MainWindow::createColorWidgets()
     colorButtonChange(QColor("#000000"),"Black");
     buttonBorder->setToolTip("Border");
 
-
-
-
     clickedColorButton = colorButtons::BACKGROUND;
     buttonBackground = new QPushButton;
     colorButtonChange(QColor("#ffffff"),"White");
@@ -258,11 +231,9 @@ void MainWindow::createColorWidgets()
     colorButtonChange(QColor("#000000"),"Black");
     buttonText->setToolTip("Text");
 
-
     connect(buttonBorder,SIGNAL(clicked(bool)),this,SLOT(borderButtonClicked()));
     connect(buttonBackground,SIGNAL(clicked(bool)),this,SLOT(bakgroundButtonClicked()));
     connect(buttonText,SIGNAL(clicked(bool)),this,SLOT(textButtonClicked()));
-
 
     connect(buttonBorder,SIGNAL(clicked(bool)),this,SLOT(buttonColorClicked()));
     connect(buttonBackground,SIGNAL(clicked(bool)),this,SLOT(buttonColorClicked()));
@@ -308,7 +279,6 @@ void MainWindow::createWidthBox()
     //    1,2	6
     //    1,6	8
 
-
     widthBox->addItem(QIcon(":/icons/width/ultra_thin.png"),   "0.1pt",0.5);
     widthBox->addItem(QIcon(":/icons/width/very_thin.png"),    "0.2pt",1);
     widthBox->addItem(QIcon(":/icons/width/thin.png"),         "0.4pt",2);
@@ -328,13 +298,10 @@ void MainWindow::isSelectedUserItem(QString str)
         emit changeStyleValue(str);
     else if (str=="user style")
     {
-        //TODO написать виджет для этого стиля, сигналы к нему и тд.
         userPenStyle->exec();
-
     }
     else
     {
-        // на всяий случай, если выбралась та поизиция, кторой нет
         Q_ASSERT(false);
     }
 }
@@ -358,7 +325,6 @@ void MainWindow::createStyleBox()
     styleBox->addItem(QIcon(":/icons/style/densely_dashdotdotted.png"), "densely dashdotdotted");
     styleBox->addItem(QIcon(":/icons/style/loosely_dashdotdotted.png"), "loosely dashdotdotted");
 
-
     //userItem - отдельное поведение
     styleBox->addItem("user style",true);
 
@@ -370,7 +336,6 @@ void MainWindow::createJointBox()
 {
     jointBox = new QComboBox();
     jointBox->setIconSize(QSize(15,15));
-
 
     jointBox->addItem(QIcon(":/icons/joint/bevel.png"),"bevel",Qt::BevelJoin);
     jointBox->addItem(QIcon(":/icons/joint/miter.png"),"miter",Qt::MiterJoin);
@@ -394,7 +359,6 @@ void MainWindow::createColorToolBar()
     createStyleBox();
     createJointBox();
 
-
     colorToolBar->addWidget(widthBox);
     colorToolBar->addWidget(styleBox);
     colorToolBar->addWidget(jointBox);
@@ -411,4 +375,7 @@ void MainWindow::createDrawAction(QAction* &action, QString name, QIcon icon, Sc
         connect(action,SIGNAL(triggered(bool)),this,SLOT(polyItem()));
     else
         connect(action,SIGNAL(triggered(bool)),this,SLOT(notPolyItem()));
+    drawActionGroup->addAction(action);
+
+    drawingToolBar->addAction(action);
 }
