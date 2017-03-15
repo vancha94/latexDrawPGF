@@ -98,6 +98,7 @@ private: //methods
     void addUndo(QUndoCommand *addCommand);
     void setNewItemParams(QGraphicsItem* item);
     void addPolyLine(QGraphicsSceneMouseEvent *event,bool isPencil = false);
+    void changePenItemParams();
 };
 
 #endif // SCENE_H

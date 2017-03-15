@@ -162,12 +162,27 @@ void Scene::setBackgroundColor(QColor color, QString str)
 {
     background.setColor(color);
     params.backgroundCOlor = str;
+
+}
+
+void Scene::changePenItemParams()
+{
+    if(sceneMode == SelectObject)
+    {
+        foreach (QGraphicsItem* item, selectedItems())
+        {
+            auto tmp = dynamic_cast<AbstractItem*> (item);
+            tmp->setPen(border,params);
+        }
+        resetText();
+    }
 }
 
 void Scene::setBorderColor(QColor color, QString str)
 {
     border.setColor(color);
     params.borderColor = str;
+    changePenItemParams();
 }
 
 void Scene::setBorderAlpha(int value)
@@ -179,6 +194,7 @@ void Scene::setBorderAlpha(int value)
     auto tmp  = border.color();
     tmp.setAlpha(value);
     border.setColor(tmp);
+    changePenItemParams();
 }
 
 void Scene::setBacgroundAlpha(int value)
@@ -195,6 +211,7 @@ void Scene::setBacgroundAlpha(int value)
 void Scene::setPenWidth(qreal value)
 {
     border.setWidthF(value);
+    changePenItemParams();
 }
 
 void Scene::setPenStyle(QString str)
@@ -202,6 +219,7 @@ void Scene::setPenStyle(QString str)
 
     border.setDashPattern(listOfLineStyles[str]);
     params.style = str;
+    changePenItemParams();
 }
 
 void Scene::setPenStyle(QString str, QVector<qreal> vector, qreal offset)
@@ -215,6 +233,7 @@ void Scene::setJointStyle(QString value, Qt::PenJoinStyle style)
 {
     border.setJoinStyle(style);
     params.jointStyle = value;
+    changePenItemParams();
 }
 
 void Scene::makeItemsControllable(bool areControllable)
@@ -351,16 +370,14 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     else if (sceneMode == DrawPencil)
     {
 
-
         if(!firstClick)
         {
             addPolyLine(event,true);
             addLine(nullptr,event,true);
             origPoint = event->scenePos();
-            // polylineitem->drawOneLine(true);
         }
 
-        // origPoint = event->scenePos();
+
     }
     if(sceneMode == SelectObject && !isMoveElemnts &&
             !selectedItems().isEmpty())
