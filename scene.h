@@ -79,15 +79,10 @@ private:
     QBrush background;
     QPen border;
 
-
     //style properties
     QHash<QString, QVector<qreal>> listOfLineStyles;
 
-
     ParamLines params;
-
-
-
 
 private: //methods
     void makeItemsControllable(bool areControllable);
@@ -102,6 +97,7 @@ private: //methods
     void addLineStyle(QString str, QPen tmpPen, qreal delta = 0);
     void addUndo(QUndoCommand *addCommand);
     void setNewItemParams(QGraphicsItem* item);
+    void addPolyLine(QGraphicsSceneMouseEvent *event,bool isPencil = false);
 };
 
 #endif // SCENE_H

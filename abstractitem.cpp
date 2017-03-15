@@ -19,7 +19,6 @@ AbstractItem::AbstractItem()
     setBorderColor("Black");
     setBackgroundColor("White");
 
-
     fillHash();
 
 }
@@ -29,16 +28,9 @@ void AbstractItem::setScenePosition(QPointF pos)
     scenePosition = pos;
 }
 
-//void AbstractItem::setSaturation(int saturation_)
-//{
-//    saturation = saturation_;
-//}
-
 void AbstractItem::setBorderColor(QString str)
 {
-    // borderColor = str;
     borderColor = QString(str);
-
 }
 
 void AbstractItem::setBackgroundColor(QString str)
@@ -81,8 +73,6 @@ void AbstractItem::setPen(const QPen &pen, ParamLines _params)
     setWidth(pen.widthF());
     setBorderAlpha(pen.color().alphaF()*100);
     setAllValues(_params);
-
-    //  setStyle();
 }
 
 
@@ -91,9 +81,6 @@ QString AbstractItem::backgroundColorToText()
 {
     return borderColor+"!"+QString::number(borderAlpha);
 }
-
-
-
 
 void AbstractItem::fillHash()
 {

@@ -8,7 +8,6 @@ LineItem::LineItem(QGraphicsLineItem* item):
     setCooordinats();
 }
 
-
 QString LineItem::prepareText()
 {
 
@@ -35,8 +34,6 @@ void LineItem::setPos(const QPointF &pos)
     QGraphicsLineItem::setPos(pos);
 
     setCooordinats();
-
-
 }
 
 void LineItem::setLine(qreal x1, qreal y1, qreal x2, qreal y2)
@@ -44,7 +41,6 @@ void LineItem::setLine(qreal x1, qreal y1, qreal x2, qreal y2)
     // qDebug() << scenePos() << scenePosition;
     QGraphicsLineItem::setLine(x1,y1,x2,y2);
     setCooordinats();
-
 }
 
 void LineItem::setVisible(bool visible)
@@ -57,10 +53,7 @@ void LineItem::setPen(const QPen &pen, ParamLines _params)
 {
     QGraphicsLineItem::setPen(pen);
     AbstractLine::setPen(pen,_params);
-
-
 }
-
 
 void LineItem::setCooordinats()
 {

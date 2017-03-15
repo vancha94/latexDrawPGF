@@ -18,11 +18,8 @@ ColorLatexWidget::ColorLatexWidget(bool white, QWidget *parent) :
 
     connect(ui->verticalSlider,SIGNAL(valueChanged(int)),this,SLOT(changePalette(int)));
 
-
-
     resize(this->minimumSize());
     setWindowFlags(Qt::Popup);
-
 
     if(white)
         colorWidget->setCurrentColor(70);
@@ -35,12 +32,8 @@ ColorLatexWidget::~ColorLatexWidget()
     delete paletteModel;
 }
 
-//typedef QVector<QPair<QColor,QString>>  foreachType;
-
 void ColorLatexWidget::changePalette(int saturation)
 {
-
-
     auto tmpColor = colorWidget->currentColor();
     tmpColor.setAlpha(saturation);
 
@@ -57,8 +50,6 @@ void ColorLatexWidget::changeColor(QColor color)
 
     emit colorChanged(color,tmpStr);
 }
-
-
 
 void ColorLatexWidget::addLatexColors()
 {
@@ -142,7 +133,6 @@ void ColorLatexWidget::setLatexPalette()
     palette.setName("Палитра цветов");
     addLatexColors();
 
-
     paletteModel=new color_widgets::ColorPaletteModel();
     paletteModel->addPalette(palette);
     paletteModel->updatePalette(0,palette);
@@ -159,20 +149,10 @@ void ColorLatexWidget::setLatexPalette()
     preview->resize(300,32);
 
     colorWidget->resize(300,200);
-
-
-
-
-
-
-
-
-
 }
 
 void ColorLatexWidget::addColor(QColor color, QString nameColor)
 {
     palette.appendColor(color,nameColor);
     latexColors[color] = nameColor;
-
 }

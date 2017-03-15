@@ -15,8 +15,6 @@ private:
     QString middleStr;
 public:
     void addText(QString str);
-
-
 };
 
 #endif // LATEXTEXT_H

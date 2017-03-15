@@ -6,12 +6,6 @@
 #include <lineitem.h>
 #include <QObject>
 
-
-//union item
-//{
-//    LineItem *line;
-//};
-
 class AddCommand : public QObject, public QUndoCommand
 {
     Q_OBJECT

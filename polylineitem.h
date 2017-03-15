@@ -10,7 +10,7 @@
 class PolyLineItem :public AbstractLine, public QGraphicsPathItem
 {
 public:
-    PolyLineItem(QGraphicsPathItem *lineItem=0);
+    PolyLineItem(bool _isPencil = false, QGraphicsPathItem *lineItem=0);
     ~PolyLineItem();
 
 public:
@@ -30,16 +30,12 @@ protected:
     QVector<LineItem*> lines;
     QPainterPath _path;
 
-   // QVector<QPointF> points;
-    //tmp
-
-
-
 protected: //methods
     virtual QString paramToText() Q_DECL_OVERRIDE;
     bool isFirstLine;
     QPointF scenPosTmp;
     QString jointStyle;
+    bool isPencil;
 
 
     //virtual void paint();

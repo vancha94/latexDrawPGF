@@ -6,30 +6,27 @@ AddCommand::AddCommand(QGraphicsItem *line, QUndoCommand *parentUndo, QObject *p
 {
     static int itemCount = 0;
     item = line;
-   // item.line = line;
-   // myGraphicsScene->addItem(line);
-   // scene->update();
+    // item.line = line;
+    // myGraphicsScene->addItem(line);
+    // scene->update();
     ++itemCount;
-     emit pushStackItem(item);
+    emit pushStackItem(item);
     flag = true;
-
 }
 
 void AddCommand::undo()
 {
     item->setVisible(false);
     emit popStackItem();
-
 }
 
 void AddCommand::redo()
 {
     item->setVisible(true);
-   // bool tmp = signalsBlocked();
+    // bool tmp = signalsBlocked();
     if(!flag)
     {
-
-    emit pushStackItem(item);
+        emit pushStackItem(item);
     }
     else
     {
@@ -41,10 +38,9 @@ void AddCommand::redo()
 
 AddCommand::~AddCommand()
 {
-   //QObject::~QObject();
+    //QObject::~QObject();
 
 }
-
 
 MoveCommand::MoveCommand(QList<QGraphicsItem *> _itemList,
                          QList<QPointF> _oldPos,
@@ -65,21 +61,21 @@ MoveCommand::~MoveCommand()
 void MoveCommand::undo()
 {
     auto size = itemsList.size();
-   for (int i=0;i<size;++i)
-   {
-       itemsList[i]->setPos(oldPos[i]);
-   }
-   emit useCommand();
+    for (int i=0;i<size;++i)
+    {
+        itemsList[i]->setPos(oldPos[i]);
+    }
+    emit useCommand();
 }
 
 void MoveCommand::redo()
 {
     auto size = itemsList.size();
-   for (int i=0;i<size;++i)
-   {
-       itemsList[i]->setPos(newPos[i]);
-   }
-   emit useCommand();
+    for (int i=0;i<size;++i)
+    {
+        itemsList[i]->setPos(newPos[i]);
+    }
+    emit useCommand();
 }
 
 DeleteCommand::DeleteCommand(QList<QGraphicsItem *> _itemList, QUndoCommand *parent, QObject *parentObj)

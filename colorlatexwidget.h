@@ -22,7 +22,6 @@ public Q_SLOTS:
     void changePalette(int saturation);
     void changeColor(QColor color);
 
-
 signals:
     void colorChanged(QColor color, QString nameColor);
     void saturationChanged(int saturation);
@@ -30,7 +29,6 @@ signals:
 private: //methods
     void setLatexPalette();
     void addColor(QColor color, QString nameColor);
-
 
 private:
     Ui::colorLatexWidget *ui;

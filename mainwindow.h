@@ -51,7 +51,6 @@ private:
     LatexText* latexText;
     //QHBoxLayout* horizontallLayout;
 
-
     QAction* lineAction;
     QAction* selectAction;
     QAction* polylineAction;
@@ -60,8 +59,6 @@ private:
 
     QAction* undoAction;
     QAction* redoAction;
-
-
 
     QToolBar* drawingToolBar;
     QToolBar* colorToolBar;
@@ -80,15 +77,11 @@ private:
     ColorLatexWidget *colorBackgroundWidget;
     ColorLatexWidget *colorTextWidget;
 
-
     QComboBox *widthBox;
     QComboBox *styleBox;
     QComboBox *jointBox;
 
     UserPenStyle *userPenStyle;
-
-
-
 
 private: //methods
     void createActions();
@@ -96,9 +89,6 @@ private: //methods
     void createDrawToolBar();
     void createColorToolBar();
     void createDrawAction(QAction* &action, QString name, QIcon icon, Scene::Mode _mode,bool isPoly = false);
-
-
-
 
     QPushButton * setButtonPointner();
     ColorLatexWidget *setWidgetPointner();

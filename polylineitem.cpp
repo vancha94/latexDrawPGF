@@ -1,11 +1,13 @@
 #include "polylineitem.h"
 #include <qpainter.h>
 
-PolyLineItem::PolyLineItem(QGraphicsPathItem *lineItem)
+PolyLineItem::PolyLineItem(bool _isPencil, QGraphicsPathItem *lineItem)
     :AbstractLine(), QGraphicsPathItem(lineItem)
 {
     isFirstLine = true;
-    params.jointStyle = "miter";
+    isPencil = _isPencil;
+
+        params.jointStyle = "miter";
 }
 
 PolyLineItem::~PolyLineItem()
@@ -50,9 +52,6 @@ void PolyLineItem::setCooordinats()
         points.push_back(tmpPoint);
     }
     isVis = isVisible();
-
-
-
 }
 
 void PolyLineItem::setVisible(bool visible)
@@ -67,13 +66,10 @@ void PolyLineItem::setPos(const QPointF &pos)
     setCooordinats();
 }
 
-
-
 void PolyLineItem::addToGroup(LineItem *item)
 {
     if(points.size()==0)
         setPos(item->scenePos());
-
 
     setParams(item->getParams());
     setPen(item->pen(),getParams());
@@ -98,12 +94,12 @@ void PolyLineItem::drawOneLine(bool isEnd)
 {
     QPainterPath tmpPath;
     QPointF currentPositionPath;
-       //  костыль для решения бага с измнением позиции сцены при рисовании второй линии
+    //  костыль для решения бага с измнением позиции сцены при рисовании второй линии
     if(_path.isEmpty())
         scenPosTmp = scenePos();
     else if(_path.elementCount()==2)
-         setPos(scenPosTmp);
-   if(!_path.isEmpty())
+        setPos(scenPosTmp);
+    if(!_path.isEmpty())
     {
         tmpPath = _path;
         currentPositionPath =tmpPath.currentPosition();
@@ -118,14 +114,14 @@ void PolyLineItem::drawOneLine(bool isEnd)
         {
             QPainterPath::Element pathElement;
             if(!_path.isEmpty())
-              pathElement = _path.elementAt(_path.elementCount());
+                pathElement = _path.elementAt(_path.elementCount());
             auto tmpElement = tmpPath.elementAt(tmpPath.elementCount());
             if(pathElement!=tmpElement)
-            _path = tmpPath;
+                _path = tmpPath;
             setPath(_path);
-             return;
+            return;
         }
-           setPath(tmpPath);
+        setPath(tmpPath);
     }
 
 
@@ -135,11 +131,8 @@ void PolyLineItem::drawOneLine(bool isEnd)
 QString PolyLineItem::paramToText()
 {
     //TODO: добавить необходимые параметры полиллинии
+    if(isPencil)
+        params.jointStyle = "round";
     QString tmpStr ="line join="+params.jointStyle+",";
     return  tmpStr+ AbstractLine::paramToText() ;
 }
-
-
-
-
-
