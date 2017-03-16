@@ -107,3 +107,51 @@ void DeleteCommand::redo()
     }
     emit useCommand();
 }
+
+ChangePenCommand::ChangePenCommand(QList<QGraphicsItem *> _itemList,
+                                   QPen _pen,
+                                   ParamLines _newParams,
+                                   QUndoCommand *parent,
+                                   QObject *parentObj)
+    :QObject(parentObj), QUndoCommand(parent)
+
+{
+    itemsList = _itemList;
+    for(int i=0;i<itemsList.size();++i)
+    {
+        auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
+        oldPenList.push_back(tmp->getUserPen());
+        paramsList.push_back(tmp->getParams());
+//        oldPenList[i] = ;
+//        paramsList[i] = ;
+    }
+    newPen = _pen;
+    newParams = _newParams;
+}
+
+ChangePenCommand::~ChangePenCommand()
+{
+
+
+}
+
+void ChangePenCommand::redo()
+{
+    for(int i=0;i<itemsList.size();++i)
+    {
+        auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
+        tmp->setPen(newPen,newParams);
+
+    }
+    emit useCommand();
+}
+
+void ChangePenCommand::undo()
+{
+    for(int i=0;i<itemsList.size();++i)
+    {
+        auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
+        tmp->setPen(oldPenList[i],paramsList[i]);
+    }
+    emit useCommand();
+}

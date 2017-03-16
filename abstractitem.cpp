@@ -14,6 +14,11 @@ void AbstractItem::setParams(const ParamLines &value)
    // setAllValues(params);
 }
 
+QPen AbstractItem::getUserPen() const
+{
+    return userPen;
+}
+
 AbstractItem::AbstractItem()
 {
     setBorderColor("Black");
@@ -69,6 +74,7 @@ void AbstractItem::setAllValues(ParamLines _params)
 
 void AbstractItem::setPen(const QPen &pen, ParamLines _params)
 {
+    userPen = pen;
     setBorderColor(_params.borderColor);
     setWidth(pen.widthF());
     setBorderAlpha(pen.color().alphaF()*100);

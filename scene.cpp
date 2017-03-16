@@ -19,6 +19,7 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     params.backgroundCOlor="White";
 
     firstClick = true;
+    isPencilDrawed = false;
 
     createLineStyles();
 
@@ -167,14 +168,12 @@ void Scene::setBackgroundColor(QColor color, QString str)
 
 void Scene::changePenItemParams()
 {
-    if(sceneMode == SelectObject)
+    if(sceneMode == SelectObject && selectedItems().size())
     {
-        foreach (QGraphicsItem* item, selectedItems())
-        {
-            auto tmp = dynamic_cast<AbstractItem*> (item);
-            tmp->setPen(border,params);
-        }
-        resetText();
+        ChangePenCommand *changePenCommand = new ChangePenCommand(selectedItems(), border, params);
+        connect(changePenCommand,&ChangePenCommand::useCommand,this,&Scene::resetText);
+        undoStack->push(dynamic_cast<QUndoCommand*>(changePenCommand));
+        // resetText();
     }
 }
 
@@ -227,6 +226,7 @@ void Scene::setPenStyle(QString str, QVector<qreal> vector, qreal offset)
     params.style = str;
     border.setDashPattern(vector);
     border.setDashOffset(offset);
+    changePenItemParams();
 }
 
 void Scene::setJointStyle(QString value, Qt::PenJoinStyle style)
@@ -375,6 +375,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             addPolyLine(event,true);
             addLine(nullptr,event,true);
             origPoint = event->scenePos();
+            isPencilDrawed = true;
         }
 
 
@@ -426,13 +427,16 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     else if(sceneMode == DrawPencil)
     {
-        if(event->button() != Qt::RightButton)
+        if(event->button() != Qt::RightButton && isPencilDrawed)
         {
             firstClick = true;
             pushStack(polylineitem);
             polylineitem=0;
             lineItem = 0;
+            isPencilDrawed = false;
         }
+        if(!isPencilDrawed)
+            firstClick = true;
     }
     QGraphicsScene::mouseReleaseEvent(event);
 }

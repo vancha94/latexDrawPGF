@@ -20,6 +20,7 @@ protected:
     QString backgroundColor;
     float borderAlpha;
     float  backgroundAlpha;
+    QPen userPen;
 
     QHash<qreal, QString>  widthHash;
     QString width;
@@ -47,6 +48,8 @@ public:
     ParamLines getParams() const;
 
     void setParams(const ParamLines &value);
+
+    QPen getUserPen() const;
 
 protected: //metods
     // в подготовке текста вызывать данный метод только в таков виде

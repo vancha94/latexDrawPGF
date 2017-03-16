@@ -60,6 +60,7 @@ private:
     LineItem *lineItem;
     PolyLineItem *polylineitem;
     bool firstClick;
+    bool isPencilDrawed;
 
     QGraphicsItem *drawItem;
     QGraphicsLineItem* itemToDraw;
