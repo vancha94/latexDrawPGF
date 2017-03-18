@@ -81,11 +81,24 @@ void AbstractItem::setPen(const QPen &pen, ParamLines _params)
     setAllValues(_params);
 }
 
+void AbstractItem::setBrush(const QBrush &brush, ParamLines _params)
+{
+    userBrush = brush;
+    setBackgroundColor(_params.backgroundCOlor);
+    setBackgroundAlpha(brush.color().alphaF()*100);
+    setAllValues(_params);
+}
 
+
+
+QString AbstractItem::borderColorToText()
+{
+    return borderColor+"!"+QString::number(borderAlpha);
+}
 
 QString AbstractItem::backgroundColorToText()
 {
-    return borderColor+"!"+QString::number(borderAlpha);
+     return backgroundColor+"!"+QString::number(backgroundAlpha);
 }
 
 void AbstractItem::fillHash()

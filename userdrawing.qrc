@@ -29,5 +29,6 @@
         <file>icons/joint/miter.png</file>
         <file>icons/joint/round.png</file>
         <file>icons/pencil.png</file>
+        <file>icons/rectangle.png</file>
     </qresource>
 </RCC>

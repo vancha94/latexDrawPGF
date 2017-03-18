@@ -6,8 +6,9 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
 {
     sceneMode = NoMode;
     lineItem = 0;
-    drawItem = 0;
+    //drawItem = 0;
     polylineitem = 0;
+    rectItem=0;
     undoStack = new QUndoStack(this);
     undoAction = undoStack->createUndoAction(this);
     redoAction = undoStack->createRedoAction(this);
@@ -16,6 +17,7 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     params.borderColor = "Black";
 
     background.setColor(QColor("#ffffff"));
+    background.setStyle(Qt::SolidPattern);
     params.backgroundCOlor="White";
 
     firstClick = true;
@@ -285,7 +287,8 @@ void Scene::addPolyLine(QGraphicsSceneMouseEvent *event, bool isPencil)
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(sceneMode == DrawLine)
+    if(sceneMode == DrawLine ||
+            sceneMode == DrawRectangle)
     {
         origPoint = event->scenePos();
         if(!firstClick)
@@ -300,7 +303,6 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if(sceneMode ==DrawPencil)
     {
         addPolyLine(event,true);
-
     }
 
     QGraphicsScene::mousePressEvent(event);
@@ -318,7 +320,7 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event,bo
     {
 
         lineItem = new LineItem();
-        lineItem->setBorderAlpha(border.color().alphaF()*100);
+      //  lineItem->setBorderAlpha(border.color().alphaF()*100);
         lineItem->setPen(border,params);
         // lineItem->setPen(QPen());
         // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
@@ -380,6 +382,38 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 
     }
+    else if (sceneMode == DrawRectangle)
+    {
+        if(!rectItem)
+        {
+            rectItem = new Rectangleltem();
+            rectItem->setPen(border,params);
+            rectItem->setBrush(background,params);
+            rectItem->setPos(origPoint);
+            addCommand = new AddCommand(rectItem);
+            addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
+           undoStack->push(addCommand);
+           this->addItem(rectItem);
+
+        }
+        qreal x =0;
+        qreal y =0;
+        auto width =event->scenePos().x()-origPoint.x();
+        auto height = event->scenePos().y()-origPoint.y();
+
+        if(width < 0)
+        {
+            x=width;
+            width = -width;
+        }
+        if(height<0)
+        {
+            y = height;
+            height = -height;
+        }
+        rectItem->setRect(x,y,width,height);
+
+    }
     if(sceneMode == SelectObject && !isMoveElemnts &&
             !selectedItems().isEmpty())
     {
@@ -437,6 +471,12 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
         if(!isPencilDrawed)
             firstClick = true;
+    }
+    else if(sceneMode == DrawRectangle)
+    {
+        if(rectItem)
+            pushStack(rectItem);
+        rectItem = 0;
     }
     QGraphicsScene::mouseReleaseEvent(event);
 }

@@ -21,6 +21,7 @@ protected:
     float borderAlpha;
     float  backgroundAlpha;
     QPen userPen;
+    QBrush userBrush;
 
     QHash<qreal, QString>  widthHash;
     QString width;
@@ -42,6 +43,7 @@ public:
     void setWidth(qreal value);
     void setStyle(QString str);
     virtual void setPen(const QPen &pen, ParamLines _params);
+    virtual void setBrush(const QBrush &brush, ParamLines _params);
 
     QString getStyle() const;
 
@@ -55,6 +57,7 @@ protected: //metods
     // в подготовке текста вызывать данный метод только в таков виде
     // "["+ paramToText() + "]"
     virtual QString paramToText()=0;
+    QString borderColorToText();
     QString backgroundColorToText();
 private:
     void fillHash();

@@ -15,13 +15,14 @@
 #include <QUndoView>
 #include <paramslines.h>
 #include <polylineitem.h>
+#include <rectangleltem.h>
 
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
     enum Mode {NoMode, SelectObject, DrawLine,DrawPolyLine,
-              DrawPencil};
+              DrawPencil,DrawRectangle};
     Scene(QObject* parent = 0);
 
     void setMode(Mode mode);
@@ -59,11 +60,11 @@ private:
     QPointF origPoint;
     LineItem *lineItem;
     PolyLineItem *polylineitem;
+    Rectangleltem *rectItem;
+
     bool firstClick;
     bool isPencilDrawed;
 
-    QGraphicsItem *drawItem;
-    QGraphicsLineItem* itemToDraw;
     // undo/redo properties
 
     QUndoStack *undoStack;

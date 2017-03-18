@@ -10,11 +10,9 @@ QString AbstractLine::paramToText()
 {
     QString tmpStr="";
 
-    tmpStr+= backgroundColorToText() + ",";
+    tmpStr+= borderColorToText() + ",";
     tmpStr+= width +",";
     tmpStr+=style;
-
-
     return tmpStr;
 }
 

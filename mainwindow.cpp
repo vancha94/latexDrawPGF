@@ -55,10 +55,11 @@ void MainWindow::createActions()
     drawingToolBar->addAction(redoAction);
     drawingToolBar->addSeparator();
 
-    createDrawAction(selectAction,      "Select object",   QIcon(":/icons/select.png"),  Scene::SelectObject);
-    createDrawAction(lineAction,        "Draw line",       QIcon(":/icons/line.png"),    Scene::DrawLine);
-    createDrawAction(polylineAction,    "Draw PolyLine",   QIcon(":/icons/polyline.png"),Scene::DrawPolyLine,true);
-    createDrawAction(pencilAction,      "Draw PolyLine",   QIcon(":/icons/pencil.png"),  Scene::DrawPencil);
+    createDrawAction(selectAction,      "Select object",   QIcon(":/icons/select.png"),   Scene::SelectObject);
+    createDrawAction(lineAction,        "Draw line",       QIcon(":/icons/line.png"),     Scene::DrawLine);
+    createDrawAction(polylineAction,    "Draw PolyLine",   QIcon(":/icons/polyline.png"), Scene::DrawPolyLine,true);
+    createDrawAction(pencilAction,      "Draw Pencil",     QIcon(":/icons/pencil.png"),   Scene::DrawPencil);
+    createDrawAction(rectangleAction,   "Draw Rectangle",  QIcon(":/icons/rectangle.png"),Scene::DrawRectangle);
 }
 
 void MainWindow::createConnections()

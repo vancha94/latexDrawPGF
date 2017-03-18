@@ -11,7 +11,9 @@ SOURCES += \
     abstractitem.cpp \
     userpenstyle.cpp \
     polylineitem.cpp \
-    abstractline.cpp
+    abstractline.cpp \
+    abstractshape.cpp \
+    rectangleltem.cpp
 
 HEADERS += \
     scene.h \
@@ -24,7 +26,9 @@ HEADERS += \
     paramslines.h \
     userpenstyle.h \
     polylineitem.h \
-    abstractline.h
+    abstractline.h \
+    abstractshape.h \
+    rectangleltem.h
 
 RESOURCES += \
     userdrawing.qrc
