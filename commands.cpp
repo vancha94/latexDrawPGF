@@ -122,8 +122,6 @@ ChangePenCommand::ChangePenCommand(QList<QGraphicsItem *> _itemList,
         auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
         oldPenList.push_back(tmp->getUserPen());
         paramsList.push_back(tmp->getParams());
-//        oldPenList[i] = ;
-//        paramsList[i] = ;
     }
     newPen = _pen;
     newParams = _newParams;
@@ -152,6 +150,50 @@ void ChangePenCommand::undo()
     {
         auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
         tmp->setPen(oldPenList[i],paramsList[i]);
+    }
+    emit useCommand();
+}
+
+ChangeBrushCommand::ChangeBrushCommand(QList<QGraphicsItem *> _itemList,
+                                       QBrush _brush,
+                                       ParamLines _newParams,
+                                       QUndoCommand *parent,
+                                       QObject *parentObj)
+:QObject(parentObj), QUndoCommand(parent)
+{
+    itemsList = _itemList;
+    for(int i=0;i<itemsList.size();++i)
+    {
+        auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
+        oldPenList.push_back(tmp->getUserBrush());
+        paramsList.push_back(tmp->getParams());
+    }
+    newBrush = _brush;
+    newParams = _newParams;
+}
+
+ChangeBrushCommand::~ChangeBrushCommand()
+{
+
+}
+
+void ChangeBrushCommand::undo()
+{
+    for(int i=0;i<itemsList.size();++i)
+    {
+        auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
+        tmp->setBrush(oldPenList[i],paramsList[i]);
+    }
+    emit useCommand();
+}
+
+void ChangeBrushCommand::redo()
+{
+    for(int i=0;i<itemsList.size();++i)
+    {
+        auto tmp = dynamic_cast<AbstractItem*>(itemsList[i]);
+        tmp->setBrush(newBrush,newParams);
+
     }
     emit useCommand();
 }

@@ -53,6 +53,8 @@ public:
 
     QPen getUserPen() const;
 
+    QBrush getUserBrush() const;
+
 protected: //metods
     // в подготовке текста вызывать данный метод только в таков виде
     // "["+ paramToText() + "]"

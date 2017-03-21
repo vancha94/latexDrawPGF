@@ -91,4 +91,26 @@ private:
     ParamLines newParams;
 
 };
+
+class ChangeBrushCommand: public QObject, public QUndoCommand
+{
+    Q_OBJECT
+public:
+    explicit ChangeBrushCommand(QList<QGraphicsItem*> _itemList, QBrush _brush, ParamLines _newParams, QUndoCommand *parent = 0, QObject *parentObj=0);
+    ~ChangeBrushCommand();
+
+    void undo() Q_DECL_OVERRIDE;
+    void redo() Q_DECL_OVERRIDE;
+
+signals:
+    void useCommand();
+private:
+    QList<QGraphicsItem*> itemsList;
+    QList<QBrush> oldPenList;
+    QList<ParamLines> paramsList;
+    QBrush newBrush;
+    ParamLines newParams;
+
+};
+
 #endif // ADDCOMMAND_H

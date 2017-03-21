@@ -101,6 +101,7 @@ private: //methods
     void setNewItemParams(QGraphicsItem* item);
     void addPolyLine(QGraphicsSceneMouseEvent *event,bool isPencil = false);
     void changePenItemParams();
+    void changeBrushItemParams();
 };
 
 #endif // SCENE_H

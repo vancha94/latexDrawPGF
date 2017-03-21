@@ -19,6 +19,11 @@ QPen AbstractItem::getUserPen() const
     return userPen;
 }
 
+QBrush AbstractItem::getUserBrush() const
+{
+    return userBrush;
+}
+
 AbstractItem::AbstractItem()
 {
     setBorderColor("Black");

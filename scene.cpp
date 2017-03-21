@@ -91,7 +91,7 @@ void Scene::addLineStyle(QString str, QPen pen, qreal delta)
 
     for (int i =1; i<tmpVector.size();i+=2)
         tmpVector[i]+=delta;
-#include <QGraphicsLineItem>
+//#include <QGraphicsLineItem>
     // обработка ситуации для стиля solid
     // для данного стиля dashPattern() возвращает пустой список
     if (!tmpVector.size())
@@ -159,10 +159,23 @@ void Scene::resetText()
     attachStrings();
 }
 
+void Scene::changeBrushItemParams()
+{
+    if (sceneMode == SelectObject && selectedItems().size())
+    {
+        ChangeBrushCommand *changeBrush = new ChangeBrushCommand(selectedItems(), background, params);
+        connect(changeBrush,&ChangeBrushCommand::useCommand,this,&Scene::resetText);
+        undoStack->push(dynamic_cast<QUndoCommand*>(changeBrush));
+
+    }
+}
+
 void Scene::setBackgroundColor(QColor color, QString str)
 {
     background.setColor(color);
     params.backgroundCOlor = str;
+
+    changeBrushItemParams();
 
 }
 
@@ -205,6 +218,7 @@ void Scene::setBacgroundAlpha(int value)
     auto tmp = background.color();
     tmp.setAlpha(value);
     background.setColor(tmp);
+    changeBrushItemParams();
 }
 
 void Scene::setPenWidth(qreal value)

@@ -31,5 +31,6 @@
         <file>icons/pencil.png</file>
         <file>icons/rectangle.png</file>
         <file>icons/copy.png</file>
+        <file>icons/ellipse.png</file>
     </qresource>
 </RCC>
