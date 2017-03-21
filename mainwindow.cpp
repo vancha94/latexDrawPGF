@@ -6,7 +6,7 @@ MainWindow::MainWindow()
 {
 
     scene = new Scene(this);
-    scene->setSceneRect(0,0,200,200);
+    scene->setSceneRect(-100,-100,200,200);
     view = new QGraphicsView(scene);
     view->setRenderHints(QPainter::Antialiasing);
 
@@ -15,6 +15,7 @@ MainWindow::MainWindow()
 
     latexText = new LatexText(dock);
     dock->setWidget(latexText);
+    latexText->setReadOnly(true);
 
     userPenStyle = new UserPenStyle();
 

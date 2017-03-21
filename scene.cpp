@@ -34,9 +34,7 @@ void Scene::setMode(Mode mode)
     sceneMode = mode;
     QGraphicsView::DragMode vMode =
             QGraphicsView::NoDrag;
-    if(mode == DrawLine ||
-            mode == DrawPolyLine ||
-            mode == DrawPencil)
+    if(mode != SelectObject && mode != NoMode)
     {
         makeItemsControllable(false);
         vMode = QGraphicsView::NoDrag;

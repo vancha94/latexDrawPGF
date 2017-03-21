@@ -8,13 +8,19 @@ Rectangleltem::Rectangleltem(QGraphicsItem *item)
 
 QString Rectangleltem::prepareText()
 {
+    // qDebug() << points << scenePosition;
+    qreal startX =scenePosition.x()+points[0].x();
+    qreal startY = -(scenePosition.y()+points[0].y());
+    qreal endX = scenePosition.x()+points[1].x()+points[0].x();
+    qreal endY = -(scenePosition.y()+ points[1].y()+points[0].y());
+
     QString tmpStr = AbstractShape::prepareText();
-    tmpStr += "("+QString::number(scenePosition.x())+",";
-    tmpStr += QString::number(-scenePosition.y()) + ")";
+    tmpStr += "("+QString::number(startX)+",";
+    tmpStr += QString::number(startY) + ")";
     tmpStr += "rectangle";
-    tmpStr += "(" + QString::number(points[1].y()) +",";
-    tmpStr += QString::number(-points[1].x()) + ");";
-    return tmpStr;
+    tmpStr += "(" + QString::number(endX) +",";
+    tmpStr += QString::number(endY) + ");";
+    return isVis?tmpStr:"";
 }
 
 void Rectangleltem::setPos(const QPointF &pos)
