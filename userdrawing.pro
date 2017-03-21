@@ -5,7 +5,6 @@ SOURCES += \
     scene.cpp \
     mainwindow.cpp \
     lineitem.cpp \
-    latextext.cpp \
     commands.cpp \
     colorlatexwidget.cpp \
     abstractitem.cpp \
@@ -13,13 +12,13 @@ SOURCES += \
     polylineitem.cpp \
     abstractline.cpp \
     abstractshape.cpp \
-    rectangleltem.cpp
+    rectangleltem.cpp \
+    latextext.cpp
 
 HEADERS += \
     scene.h \
     mainwindow.h \
     lineitem.h \
-    latextext.h \
     abstractitem.h \
     commands.h \
     colorlatexwidget.h \
@@ -28,7 +27,8 @@ HEADERS += \
     polylineitem.h \
     abstractline.h \
     abstractshape.h \
-    rectangleltem.h
+    rectangleltem.h \
+    latextext.h
 
 RESOURCES += \
     userdrawing.qrc
@@ -39,4 +39,5 @@ include(color_widgets.pri)
 
 FORMS += \
     colorlatexwidget.ui \
-    userpenstyle.ui
+    userpenstyle.ui \
+    latextextnew.ui

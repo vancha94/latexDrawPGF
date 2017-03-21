@@ -1,20 +1,27 @@
-#ifndef LATEXTEXT_H
-#define LATEXTEXT_H
+#ifndef LATEXTEXTNEW_H
+#define LATEXTEXTNEW_H
 
-#include <QPlainTextEdit>
+#include <QWidget>
 
+namespace Ui {
+    class LatexTextNew;
+}
 
-class LatexText : public QPlainTextEdit
+class LatexText : public QWidget
 {
     Q_OBJECT
+
 public:
-    LatexText(QWidget *parent);
+    explicit LatexText(QWidget *parent = 0);
+    ~LatexText();
+    void addText(QString str);
 private:
     const QString startStr = "%\\usepackage[dvipsnames]{xcolor}\n%\\usepackage{tikz}\n\\begin{tikzpicture}[scale=0.01]\n";
     const QString endStr = "\\end{tikzpicture}";
     QString middleStr;
-public:
-    void addText(QString str);
+
+private:
+    Ui::LatexTextNew *ui;
 };
 
-#endif // LATEXTEXT_H
+#endif // LATEXTEXTNEW_H

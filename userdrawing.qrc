@@ -30,5 +30,6 @@
         <file>icons/joint/round.png</file>
         <file>icons/pencil.png</file>
         <file>icons/rectangle.png</file>
+        <file>icons/copy.png</file>
     </qresource>
 </RCC>

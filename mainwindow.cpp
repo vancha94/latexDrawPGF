@@ -15,7 +15,7 @@ MainWindow::MainWindow()
 
     latexText = new LatexText(dock);
     dock->setWidget(latexText);
-    latexText->setReadOnly(true);
+
 
     userPenStyle = new UserPenStyle();
 
