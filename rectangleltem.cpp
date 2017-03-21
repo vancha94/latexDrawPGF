@@ -8,7 +8,6 @@ Rectangleltem::Rectangleltem(QGraphicsItem *item)
 
 QString Rectangleltem::prepareText()
 {
-    // qDebug() << points << scenePosition;
     qreal startX =scenePosition.x()+points[0].x();
     qreal startY = -(scenePosition.y()+points[0].y());
     qreal endX = scenePosition.x()+points[1].x()+points[0].x();

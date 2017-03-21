@@ -6,9 +6,10 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
 {
     sceneMode = NoMode;
     lineItem = 0;
-    //drawItem = 0;
     polylineitem = 0;
-    rectItem=0;
+    rectItem = 0;
+    ellipseItem = 0;
+
     undoStack = new QUndoStack(this);
     undoAction = undoStack->createUndoAction(this);
     redoAction = undoStack->createRedoAction(this);
@@ -91,15 +92,13 @@ void Scene::addLineStyle(QString str, QPen pen, qreal delta)
 
     for (int i =1; i<tmpVector.size();i+=2)
         tmpVector[i]+=delta;
-//#include <QGraphicsLineItem>
+    //#include <QGraphicsLineItem>
     // обработка ситуации для стиля solid
     // для данного стиля dashPattern() возвращает пустой список
     if (!tmpVector.size())
         tmpVector << 10 << 0;
     listOfLineStyles[str] = tmpVector;
 }
-
-
 
 void Scene::createLineStyles()
 {
@@ -300,7 +299,8 @@ void Scene::addPolyLine(QGraphicsSceneMouseEvent *event, bool isPencil)
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(sceneMode == DrawLine ||
-            sceneMode == DrawRectangle)
+            sceneMode == DrawRectangle ||
+            sceneMode == DrawEllipse)
     {
         origPoint = event->scenePos();
         if(!firstClick)
@@ -332,7 +332,7 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event,bo
     {
 
         lineItem = new LineItem();
-      //  lineItem->setBorderAlpha(border.color().alphaF()*100);
+        //  lineItem->setBorderAlpha(border.color().alphaF()*100);
         lineItem->setPen(border,params);
         // lineItem->setPen(QPen());
         // lineItem->setPen(QPen(Qt::black, 3, Qt::SolidLine));
@@ -364,16 +364,87 @@ void Scene::movingsElementsStart()
     }
 }
 
+void Scene::addRectangle(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event)
+{
+    if(!rectItem)
+    {
+        rectItem = new Rectangleltem();
+        rectItem->setPen(border,params);
+        rectItem->setBrush(background,params);
+        rectItem->setPos(origPoint);
+        addCommand = new AddCommand(rectItem);
+        addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
+        undoStack->push(addCommand);
+        this->addItem(rectItem);
+
+    }
+    qreal x =0;
+    qreal y =0;
+    auto width =event->scenePos().x()-origPoint.x();
+    auto height = event->scenePos().y()-origPoint.y();
+
+    if(width < 0)
+    {
+        x=width;
+        width = -width;
+    }
+    if(height<0)
+    {
+        y = height;
+        height = -height;
+    }
+    rectItem->setRect(x,y,width,height);
+}
+
+void Scene::addPencil(QGraphicsSceneMouseEvent *event)
+{
+    if(!firstClick)
+    {
+        addPolyLine(event,true);
+        addLine(nullptr,event,true);
+        origPoint = event->scenePos();
+        isPencilDrawed = true;
+    }
+}
+
+// TODO: отрефакторить так, чтобы небыло повторяющегося поведения в добавлении элементов (чтобы все было в одном методе)
+
+void Scene::addElipse(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event)
+{
+    if(!ellipseItem)
+    {
+        ellipseItem = new EllipseItem();
+        ellipseItem->setPen(border,params);
+        ellipseItem->setBrush(background,params);
+        ellipseItem->setPos(origPoint);
+        addCommand = new AddCommand(ellipseItem);
+        addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
+        undoStack->push(addCommand);
+        this->addItem(ellipseItem);
+
+    }
+    qreal x =0;
+    qreal y =0;
+    auto width =event->scenePos().x()-origPoint.x();
+    auto height = event->scenePos().y()-origPoint.y();
+
+    if(width < 0)
+    {
+        x=width;
+        width = -width;
+    }
+    if(height<0)
+    {
+        y = height;
+        height = -height;
+    }
+    ellipseItem->setRect(x,y,width,height);
+}
+
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QUndoCommand *addCommand;
-
-    if(sceneMode == DrawLine &&
-            event->buttons() & Qt::LeftButton)
-    {
-        addLine(addCommand, event);
-    }
-    else if (sceneMode == DrawPolyLine)
+    if (sceneMode == DrawPolyLine)
     {
         if(!firstClick)
         {
@@ -381,57 +452,31 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             polylineitem->drawOneLine();
         }
     }
-    else if (sceneMode == DrawPencil)
+    if( event->buttons() & Qt::LeftButton)
     {
-
-        if(!firstClick)
+        if(sceneMode == DrawLine)
         {
-            addPolyLine(event,true);
-            addLine(nullptr,event,true);
-            origPoint = event->scenePos();
-            isPencilDrawed = true;
+            addLine(addCommand, event);
         }
-
-
-    }
-    else if (sceneMode == DrawRectangle)
-    {
-        if(!rectItem)
+        else if (sceneMode == DrawPencil)
         {
-            rectItem = new Rectangleltem();
-            rectItem->setPen(border,params);
-            rectItem->setBrush(background,params);
-            rectItem->setPos(origPoint);
-            addCommand = new AddCommand(rectItem);
-            addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
-           undoStack->push(addCommand);
-           this->addItem(rectItem);
-
+            addPencil(event);
         }
-        qreal x =0;
-        qreal y =0;
-        auto width =event->scenePos().x()-origPoint.x();
-        auto height = event->scenePos().y()-origPoint.y();
-
-        if(width < 0)
+        else if (sceneMode == DrawRectangle)
         {
-            x=width;
-            width = -width;
+            addRectangle(addCommand, event);
         }
-        if(height<0)
+        else if (sceneMode == DrawEllipse)
         {
-            y = height;
-            height = -height;
+            addElipse(addCommand, event);
         }
-        rectItem->setRect(x,y,width,height);
-
     }
     if(sceneMode == SelectObject && !isMoveElemnts &&
             !selectedItems().isEmpty())
     {
         movingsElementsStart();
     }
-    else
+    //else
         QGraphicsScene::mouseMoveEvent(event);
 }
 
@@ -489,6 +534,12 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if(rectItem)
             pushStack(rectItem);
         rectItem = 0;
+    }
+    else if(sceneMode == DrawEllipse)
+    {
+        if(ellipseItem)
+            pushStack(ellipseItem);
+        ellipseItem = 0;
     }
     QGraphicsScene::mouseReleaseEvent(event);
 }

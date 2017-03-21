@@ -16,13 +16,14 @@
 #include <paramslines.h>
 #include <polylineitem.h>
 #include <rectangleltem.h>
+#include <ellipseitem.h>
 
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
     enum Mode {NoMode, SelectObject, DrawLine,DrawPolyLine,
-              DrawPencil,DrawRectangle};
+              DrawPencil,DrawRectangle,DrawEllipse};
     Scene(QObject* parent = 0);
 
     void setMode(Mode mode);
@@ -61,6 +62,8 @@ private:
     LineItem *lineItem;
     PolyLineItem *polylineitem;
     Rectangleltem *rectItem;
+    EllipseItem *ellipseItem;
+
 
     bool firstClick;
     bool isPencilDrawed;
@@ -102,6 +105,9 @@ private: //methods
     void addPolyLine(QGraphicsSceneMouseEvent *event,bool isPencil = false);
     void changePenItemParams();
     void changeBrushItemParams();
+    void addRectangle(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
+    void addPencil(QGraphicsSceneMouseEvent *event);
+    void addElipse(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
 };
 
 #endif // SCENE_H
