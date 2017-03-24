@@ -46,15 +46,12 @@ public:
     virtual void setBrush(const QBrush &brush, ParamLines _params);
 
     QString getStyle() const;
-
     ParamLines getParams() const;
-
     void setParams(const ParamLines &value);
-
     QPen getUserPen() const;
-
     QBrush getUserBrush() const;
 
+    virtual bool isText();
 protected: //metods
     // в подготовке текста вызывать данный метод только в таков виде
     // "["+ paramToText() + "]"

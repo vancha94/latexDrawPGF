@@ -38,7 +38,6 @@ void LineItem::setPos(const QPointF &pos)
 
 void LineItem::setLine(qreal x1, qreal y1, qreal x2, qreal y2)
 {
-    // qDebug() << scenePos() << scenePosition;
     QGraphicsLineItem::setLine(x1,y1,x2,y2);
     setCooordinats();
 }

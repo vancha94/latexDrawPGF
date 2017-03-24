@@ -14,7 +14,9 @@ SOURCES += \
     abstractshape.cpp \
     rectangleltem.cpp \
     latextext.cpp \
-    ellipseitem.cpp
+    ellipseitem.cpp \
+    polygonitem.cpp \
+    textitem.cpp
 
 HEADERS += \
     scene.h \
@@ -30,7 +32,9 @@ HEADERS += \
     abstractshape.h \
     rectangleltem.h \
     latextext.h \
-    ellipseitem.h
+    ellipseitem.h \
+    polygonitem.h \
+    textitem.h
 
 RESOURCES += \
     userdrawing.qrc

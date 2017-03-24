@@ -32,5 +32,7 @@
         <file>icons/rectangle.png</file>
         <file>icons/copy.png</file>
         <file>icons/ellipse.png</file>
+        <file>icons/polygon.png</file>
+        <file>icons/text.png</file>
     </qresource>
 </RCC>

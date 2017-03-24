@@ -6,6 +6,7 @@
 #include <lineitem.h>
 #include <QObject>
 #include <paramslines.h>
+#include <textitem.h>
 
 class AddCommand : public QObject, public QUndoCommand
 {
@@ -111,6 +112,23 @@ private:
     QBrush newBrush;
     ParamLines newParams;
 
+};
+
+class TextChanged: public QObject, public QUndoCommand
+{
+    Q_OBJECT
+public:
+    explicit TextChanged(TextItem *item, QString _oldText, QString _newText);
+    ~TextChanged();
+
+    void undo() Q_DECL_OVERRIDE;
+    void redo() Q_DECL_OVERRIDE;
+
+signals:
+    void useCommand();
+private:
+    QString newText, oldText;
+    TextItem *item;
 };
 
 #endif // ADDCOMMAND_H

@@ -62,6 +62,8 @@ void MainWindow::createActions()
     createDrawAction(pencilAction,      "Draw Pencil",     QIcon(":/icons/pencil.png"),   Scene::DrawPencil);
     createDrawAction(rectangleAction,   "Draw Rectangle",  QIcon(":/icons/rectangle.png"),Scene::DrawRectangle);
     createDrawAction(ellipseAction,     "Draw  Ellipse",   QIcon(":/icons/ellipse.png"),  Scene::DrawEllipse);
+    createDrawAction(polygonAction,     "Draw  Polygon",   QIcon(":/icons/polygon.png"),  Scene::DrawPolygon, true);
+    createDrawAction(textAction,        "Draw  Text   ",   QIcon(":/icons/text.png"),    Scene::DrawText);
 
 }
 

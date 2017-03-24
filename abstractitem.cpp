@@ -24,6 +24,11 @@ QBrush AbstractItem::getUserBrush() const
     return userBrush;
 }
 
+bool AbstractItem::isText()
+{
+    return false;
+}
+
 AbstractItem::AbstractItem()
 {
     setBorderColor("Black");

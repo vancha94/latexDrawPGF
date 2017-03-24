@@ -17,13 +17,18 @@
 #include <polylineitem.h>
 #include <rectangleltem.h>
 #include <ellipseitem.h>
+#include <polygonitem.h>
+#include <textitem.h>
+
+#include <QGraphicsTextItem>
 
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
     enum Mode {NoMode, SelectObject, DrawLine,DrawPolyLine,
-              DrawPencil,DrawRectangle,DrawEllipse};
+              DrawPencil,DrawRectangle,DrawEllipse,
+               DrawPolygon, DrawText};
     Scene(QObject* parent = 0);
 
     void setMode(Mode mode);
@@ -63,6 +68,8 @@ private:
     PolyLineItem *polylineitem;
     Rectangleltem *rectItem;
     EllipseItem *ellipseItem;
+    PolygonItem *polygonItem;
+    TextItem *textItem;
 
 
     bool firstClick;
@@ -89,6 +96,10 @@ private:
 
     ParamLines params;
 
+    //tst
+    QGraphicsTextItem *textIem;
+
+
 private: //methods
     void makeItemsControllable(bool areControllable);
     void connectSignals();
@@ -108,6 +119,8 @@ private: //methods
     void addRectangle(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
     void addPencil(QGraphicsSceneMouseEvent *event);
     void addElipse(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
+    void addPolygon(QGraphicsSceneMouseEvent *event);
+    void drawPolygon(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // SCENE_H

@@ -6,9 +6,7 @@ AddCommand::AddCommand(QGraphicsItem *line, QUndoCommand *parentUndo, QObject *p
 {
     static int itemCount = 0;
     item = line;
-    // item.line = line;
-    // myGraphicsScene->addItem(line);
-    // scene->update();
+
     ++itemCount;
     emit pushStackItem(item);
     flag = true;
@@ -66,6 +64,7 @@ void MoveCommand::undo()
         itemsList[i]->setPos(oldPos[i]);
     }
     emit useCommand();
+ //   qDebug() << oldPos << newPos;
 }
 
 void MoveCommand::redo()
@@ -76,6 +75,7 @@ void MoveCommand::redo()
         itemsList[i]->setPos(newPos[i]);
     }
     emit useCommand();
+ //   qDebug() << oldPos << newPos;
 }
 
 DeleteCommand::DeleteCommand(QList<QGraphicsItem *> _itemList, QUndoCommand *parent, QObject *parentObj)
@@ -196,4 +196,27 @@ void ChangeBrushCommand::redo()
 
     }
     emit useCommand();
+}
+
+TextChanged::TextChanged(TextItem *_item, QString _oldText, QString _newText)
+{
+    oldText = _oldText;
+    newText = _newText;
+    item    = _item;
+}
+
+TextChanged::~TextChanged()
+{
+
+}
+
+void TextChanged::undo()
+{
+    item->setPlainText(oldText);
+
+}
+
+void TextChanged::redo()
+{
+    item->setPlainText(newText);
 }

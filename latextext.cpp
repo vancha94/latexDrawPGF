@@ -11,6 +11,7 @@ LatexText::LatexText(QWidget *parent) :
     middleStr = "\n";
     ui->plainText->setReadOnly(true);
     ui->pushButton->setIcon(QIcon(":/icons/copy.png"));
+    ui->pushButton->setText("Copy Text");
     connect(ui->pushButton,SIGNAL(clicked(bool)),this,SLOT(buttonCliked()));
 }
 
