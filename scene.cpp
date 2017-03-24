@@ -30,7 +30,6 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     createLineStyles();
 
     //test code
-    textIem=0;
 
 }
 
@@ -263,6 +262,13 @@ void Scene::setJointStyle(QString value, Qt::PenJoinStyle style)
     changePenItemParams();
 }
 
+void Scene::textChanged(QString str, TextItem *item)
+{
+    TextChanged *command = new TextChanged(item,str,item->toPlainText());
+    connect(command,&TextChanged::useCommand,this,&Scene::resetText);
+    undoStack->push(dynamic_cast<QUndoCommand*>(command));
+}
+
 void Scene::makeItemsControllable(bool areControllable)
 {
     foreach(QGraphicsItem* item, items())
@@ -407,6 +413,8 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
             pushStack(textItem);
             this->addItem(textItem);
+
+            connect(textItem,&TextItem::textChanged,this,&Scene::textChanged);
             // auto ttt = textIem->toPlainText();
         }
         textItem =0;

@@ -198,7 +198,9 @@ void ChangeBrushCommand::redo()
     emit useCommand();
 }
 
-TextChanged::TextChanged(TextItem *_item, QString _oldText, QString _newText)
+TextChanged::TextChanged(TextItem *_item, QString _oldText, QString _newText,
+                         QUndoCommand *parent, QObject *parentObj)
+    :QObject(parentObj), QUndoCommand(parent)
 {
     oldText = _oldText;
     newText = _newText;
@@ -213,10 +215,12 @@ TextChanged::~TextChanged()
 void TextChanged::undo()
 {
     item->setPlainText(oldText);
+    emit useCommand();
 
 }
 
 void TextChanged::redo()
 {
     item->setPlainText(newText);
+      emit useCommand();
 }

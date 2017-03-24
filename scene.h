@@ -52,6 +52,8 @@ public Q_SLOTS:
     void setPenStyle(QString str, QVector<qreal> vector, qreal offset = 0);
 
     void setJointStyle(QString value, Qt::PenJoinStyle style);
+
+    void textChanged(QString str, TextItem *item);
 protected: //events
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -97,9 +99,6 @@ private:
     ParamLines params;
 
     //tst
-    QGraphicsTextItem *textIem;
-
-
 private: //methods
     void makeItemsControllable(bool areControllable);
     void connectSignals();

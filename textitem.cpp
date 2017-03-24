@@ -14,7 +14,14 @@ TextItem::~TextItem()
 
 QString TextItem::prepareText()
 {
+    qreal centreX = scenePos().x() + boundingRect().width()/2;
+    qreal centreY = scenePos().y() + boundingRect().height()/2;
+
     QString tmpStr = "\\draw ["+paramToText()+"]";
+    tmpStr+="("+QString::number(centreX)+",";
+    tmpStr+=QString::number(-centreY) +")";
+    tmpStr+=" node {";
+    tmpStr+=toPlainText() +"};";
 
     return isVis?tmpStr:"";
 }

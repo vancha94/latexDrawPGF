@@ -118,7 +118,7 @@ class TextChanged: public QObject, public QUndoCommand
 {
     Q_OBJECT
 public:
-    explicit TextChanged(TextItem *item, QString _oldText, QString _newText);
+    explicit TextChanged(TextItem *item, QString _oldText, QString _newText,QUndoCommand *parent = 0, QObject *parentObj=0);
     ~TextChanged();
 
     void undo() Q_DECL_OVERRIDE;
