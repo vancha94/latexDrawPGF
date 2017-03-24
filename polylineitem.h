@@ -1,44 +1,39 @@
 #ifndef POLYLINEITEM_H
 #define POLYLINEITEM_H
 
-#include <abstractitem.h>
-#include <QGraphicsPathItem>
-#include <lineitem.h>
+
+#include <QGraphicsPolygonItem>
 #include <abstractline.h>
 
 
-class PolyLineItem :public AbstractLine, public QGraphicsPathItem
+class PolyLineItem :public AbstractLine, public QGraphicsPolygonItem
 {
 public:
-    PolyLineItem(bool _isPencil = false, QGraphicsPathItem *lineItem=0);
+    PolyLineItem(bool _isPencil = false, QGraphicsItem *lineItem=0);
     ~PolyLineItem();
 
 public:
-    // не забыть, что для последующий симоволо userType  - менять
-   // enum {Polyline = UserType +1};
+
     virtual QString prepareText() Q_DECL_OVERRIDE;
     virtual void setCooordinats() Q_DECL_OVERRIDE;
     void setVisible(bool visible);
     void setPos(const QPointF &pos);
-   // void addItem(LineItem* item);
-    void addToGroup(LineItem *item);
-    //void setPen(const QPen &pen, ParamLines _params);
     void setParams(const ParamLines &value);
     void setPen(const QPen &pen, ParamLines _params);
-    void drawOneLine(bool isEnd = false);
-protected:
-    QVector<LineItem*> lines;
-    QPainterPath _path;
+    void setPolygon(const QPolygonF &polygon);
+
 
 protected: //methods
     virtual QString paramToText() Q_DECL_OVERRIDE;
-    bool isFirstLine;
-    QPointF scenPosTmp;
-    QString jointStyle;
+
     bool isPencil;
 
 
-    //virtual void paint();
+    // QGraphicsItem interface
+public:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
+    virtual QRectF boundingRect() const Q_DECL_OVERRIDE;
+    virtual QPainterPath shape() const Q_DECL_OVERRIDE;
 };
 
 #endif // POLYLINEITEM_H

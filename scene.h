@@ -102,7 +102,7 @@ private:
 private: //methods
     void makeItemsControllable(bool areControllable);
     void connectSignals();
-    void addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event, bool isPoly=false);
+    void addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
     void movingElementsEnd();
     void movingsElementsStart();
     void addCommandConnectSignal(AddCommand *addCommand);
@@ -118,8 +118,10 @@ private: //methods
     void addRectangle(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
     void addPencil(QGraphicsSceneMouseEvent *event);
     void addElipse(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event);
-    void addPolygon(QGraphicsSceneMouseEvent *event);
+    void addPolygonItem(QGraphicsSceneMouseEvent *event);
     void drawPolygon(QGraphicsSceneMouseEvent *event);
+    void addText(QGraphicsSceneMouseEvent *event);
+    void drawPolyline(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // SCENE_H

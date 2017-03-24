@@ -63,7 +63,6 @@ void Scene::undo()
         firstClick = true;
         polygonItem = 0;
         polylineitem =0;
-        lineItem =0;
     }
 }
 
@@ -274,7 +273,6 @@ void Scene::makeItemsControllable(bool areControllable)
     foreach(QGraphicsItem* item, items())
     {
         auto tmp = dynamic_cast<AbstractItem*>(item);
-         bool tmpLog = sceneMode == DrawText && tmp->isText();
         item->setFlag(QGraphicsItem::ItemIsSelectable,areControllable);
         item->setFlag(QGraphicsItem::ItemIsMovable,
                       areControllable);
@@ -297,23 +295,28 @@ void Scene::connectSignals()
 
 void Scene::addPolyLine(QGraphicsSceneMouseEvent *event, bool isPencil)
 {
-    //  qDebug()<<firstClick;
     if(firstClick &&
             ( event->button() == Qt::LeftButton  || event->buttons() == Qt::LeftButton))
     {
         origPoint = event->scenePos();
         firstClick = false;
         polylineitem = new PolyLineItem(isPencil);
+        polylineitem->setPen(border,params);
+
+
         QUndoCommand* addCommand = new AddCommand(polylineitem);
         addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
         undoStack->push(addCommand);
+
         this->addItem(polylineitem);
-        addLine(addCommand,event,true);
     }
     else if (!firstClick || (isPencil && event->button() != Qt::RightButton))
     {
-        polylineitem->drawOneLine(true);
-        lineItem = 0;
+
+        QPolygonF tmpPolygon = polylineitem->polygon();
+        tmpPolygon <<event->scenePos();
+        polylineitem->setPolygon(tmpPolygon);
+
         if(event->button() == Qt::RightButton)
         {
             firstClick = true;
@@ -326,7 +329,7 @@ void Scene::addPolyLine(QGraphicsSceneMouseEvent *event, bool isPencil)
     }
 }
 
-void Scene::addPolygon(QGraphicsSceneMouseEvent *event)
+void Scene::addPolygonItem(QGraphicsSceneMouseEvent *event)
 {
     if(firstClick &&
             ( event->button() == Qt::LeftButton  || event->buttons() == Qt::LeftButton))
@@ -352,8 +355,7 @@ void Scene::addPolygon(QGraphicsSceneMouseEvent *event)
         QPolygonF tmpPolygon = polygonItem->polygon();
         tmpPolygon <<event->scenePos();
         polygonItem->setPolygon(tmpPolygon);
-        //  qDebug() << polygonItem->scenePos();
-        //  qDebug() << polygonItem->polygon();
+
         if(event->button() == Qt::RightButton)
         {
             firstClick = true;
@@ -361,6 +363,36 @@ void Scene::addPolygon(QGraphicsSceneMouseEvent *event)
             polygonItem = 0;
         }
     }
+}
+
+void Scene::addText(QGraphicsSceneMouseEvent *event)
+{
+    auto tmpList = items(event->scenePos());
+    bool textFlag = false;
+    if(tmpList.size())
+        for(int i =0; i<tmpList.size() && !textFlag ;++i )
+        {
+           auto tmpItem = dynamic_cast<AbstractItem*>(tmpList[i]);
+            textFlag = tmpItem->isText();
+        }
+
+    if(!textItem && !textFlag)
+    {
+        textItem = new TextItem();
+        textItem->setPen(border,params);
+        textItem->setPos(event->scenePos());
+        textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+
+
+        QUndoCommand *addCommand = new AddCommand(textItem);
+        addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
+        undoStack->push(addCommand);
+
+        pushStack(textItem);
+        this->addItem(textItem);
+
+    }
+    textItem =0;
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -385,39 +417,11 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
     else if (sceneMode == DrawPolygon)
     {
-        addPolygon(event);
+        addPolygonItem(event);
     }
-    //TODO: подумать насчет особеностей данного поля чтоб в итоге работало
     else if (sceneMode == DrawText)
     {
-        auto tmpList = items(event->scenePos());
-        bool textFlag = false;
-        if(tmpList.size())
-            for(int i =0; i<tmpList.size() && !textFlag ;++i )
-            {
-               auto tmpItem = dynamic_cast<AbstractItem*>(tmpList[i]);
-                textFlag = tmpItem->isText();
-            }
-
-        if(!textItem && !textFlag)
-        {
-            textItem = new TextItem();
-            textItem->setPen(border,params);
-            textItem->setPos(event->scenePos());
-            textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
-
-
-            QUndoCommand *addCommand = new AddCommand(textItem);
-            addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
-            undoStack->push(addCommand);
-
-            pushStack(textItem);
-            this->addItem(textItem);
-
-            connect(textItem,&TextItem::textChanged,this,&Scene::textChanged);
-            // auto ttt = textIem->toPlainText();
-        }
-        textItem =0;
+        addText(event);
     }
 
     QGraphicsScene::mousePressEvent(event);
@@ -429,7 +433,7 @@ void Scene::addCommandConnectSignal(AddCommand *addCommand)
     connect(addCommand,&AddCommand::popStackItem,this,&Scene::popStack);
 }
 
-void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event,bool isPoly)
+void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event)
 {
     if(!lineItem)
     {
@@ -438,16 +442,10 @@ void Scene::addLine(QUndoCommand *addCommand, QGraphicsSceneMouseEvent *event,bo
         lineItem->setPen(border,params);
 
         lineItem->setPos(origPoint);
-        if(!isPoly)
-        {
-            addCommand = new AddCommand(lineItem);
-            addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
-            undoStack->push(addCommand);
-            this->addItem(lineItem);
-        }
-        else if(isPoly)
-            polylineitem->addToGroup(lineItem);
-
+        addCommand = new AddCommand(lineItem);
+        addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
+        undoStack->push(addCommand);
+        this->addItem(lineItem);
     }
     lineItem->setLine(0,0,
                       event->scenePos().x() - origPoint.x(),
@@ -492,7 +490,6 @@ void Scene::addPencil(QGraphicsSceneMouseEvent *event)
     if(!firstClick)
     {
         addPolyLine(event,true);
-        addLine(nullptr,event,true);
         origPoint = event->scenePos();
         isPencilDrawed = true;
     }
@@ -535,16 +532,21 @@ void Scene::drawPolygon(QGraphicsSceneMouseEvent *event)
 {
     if(!firstClick)
     {
-
-        //QPointF tmpPoint;
         auto tmpPolygon = polygonItem->polygon();
         if(polygonItem->polygon().size()>1)
             tmpPolygon.removeLast();
         tmpPolygon << event->scenePos();
         polygonItem->setPolygon(tmpPolygon);
-
-
     }
+}
+
+void Scene::drawPolyline(QGraphicsSceneMouseEvent *event)
+{
+    auto tmpPolygon = polylineitem->polygon();
+    if(polylineitem->polygon().size()>1)
+        tmpPolygon.removeLast();
+    tmpPolygon << event->scenePos();
+    polylineitem->setPolygon(tmpPolygon);
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -554,8 +556,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     {
         if(!firstClick)
         {
-            addLine(nullptr,event,true);
-            polylineitem->drawOneLine();
+            drawPolyline(event);
         }
     }
     else if(sceneMode == DrawPolygon)
@@ -645,7 +646,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             firstClick = true;
             pushStack(polylineitem);
             polylineitem=0;
-            lineItem = 0;
+        //    lineItem = 0;
             isPencilDrawed = false;
         }
         if(!isPencilDrawed)

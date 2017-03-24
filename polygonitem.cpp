@@ -14,16 +14,14 @@ QString PolygonItem::prepareText()
     tmpStr+="even odd rule]";
     if(points.size())
     {
-
-
         for(int i =0;i<points.size();++i)
         {
-            tmpStr+= "("+QString::number(points[i].x()) + ",";
-            tmpStr+= QString::number(-points[i].y())+") -- ";
+            tmpStr+= "("+QString::number(scenePos().x()+ points[i].x()) + ",";
+            tmpStr+= QString::number(-(scenePos().y()+ points[i].y()))+") -- ";
         }
 
-        tmpStr+= "("+QString::number(points[0].x()) + ",";
-        tmpStr+= QString::number(-points[0].y())+");";
+        tmpStr+= "("+QString::number(scenePos().x()+ points[0].x()) + ",";
+        tmpStr+= QString::number(-(scenePos().y()+ points[0].y()))+");";
     }
     return isVis?tmpStr:"";
 }
@@ -46,8 +44,6 @@ void PolygonItem::setPen(const QPen &pen, ParamLines _params)
     QGraphicsPolygonItem::setPen(pen);
     AbstractLine::setPen(pen,_params);
 }
-
-
 
 void PolygonItem::setBrush(const QBrush &brush, ParamLines _params)
 {

@@ -1,81 +1,63 @@
 #include "polylineitem.h"
 #include <qpainter.h>
 
-PolyLineItem::PolyLineItem(bool _isPencil, QGraphicsPathItem *lineItem)
-    :AbstractLine(), QGraphicsPathItem(lineItem)
+PolyLineItem::PolyLineItem(bool _isPencil, QGraphicsItem *lineItem)
+    :AbstractLine(), QGraphicsPolygonItem(lineItem)
 {
-    isFirstLine = true;
     isPencil = _isPencil;
-
-        params.jointStyle = "miter";
+    params.jointStyle = "miter";
 }
 
 PolyLineItem::~PolyLineItem()
 {
 
 }
-
+// TODO: решить баг с повторением некоторых точек менее костыльно
 QString PolyLineItem::prepareText()
 {
     QString tmpStr="";
-    if(isVis)
+    tmpStr = "\\draw";
+    tmpStr+="["+paramToText() +"]";
+    if(points.size())
     {
-
-        tmpStr = "\\draw";
-        tmpStr+="["+paramToText() +"]";
-        tmpStr+=" (" + QString::number(scenePosition.x())+",";
-        tmpStr+=QString::number(-scenePosition.y())+") ";
+        for(int i =0;i<points.size()-1;++i)
         {
-            for(int i=0; i<points.size();++i)
-            {
-                tmpStr += "-- ++("+ QString::number(points[i].x()) + ",";
-                tmpStr += QString::number(-points[i].y()) + ")";
-            }
-            tmpStr +=";";
+            tmpStr+= "("+QString::number(scenePos().x()+ points[i].x()) + ",";
+            tmpStr+= QString::number(-(scenePos().y()+ points[i].y()))+")";
+
+            if(i!=points.size()-2)
+                tmpStr+=" -- ";
         }
+        tmpStr+= ";";
     }
-    return tmpStr;
+
+    return isVis?tmpStr:"";
 }
 
 void PolyLineItem::setCooordinats()
 {
+  //  qDebug() <<flags();
+
     setScenePosition(scenePos());
-    if(points.size())
-    {
-        points.clear();
-    }
-    for(int i=0;i<lines.size();i++)
-    {
-        QPointF tmpPoint;
-        tmpPoint.setX(lines[i]->line().dx());
-        tmpPoint.setY(lines[i]->line().dy());
-        points.push_back(tmpPoint);
-    }
     isVis = isVisible();
+
+    auto tmp = polygon();
+    if (points.length())
+        points.clear();
+    for(int i =0;i<polygon().size();++i)
+        points << tmp[i];
 }
 
 void PolyLineItem::setVisible(bool visible)
 {
-    QGraphicsPathItem::setVisible(visible);
+    QGraphicsPolygonItem::setVisible(visible);
     setCooordinats();
 }
 
 void PolyLineItem::setPos(const QPointF &pos)
 {
-    QGraphicsPathItem::setPos(pos);
+    QGraphicsPolygonItem::setPos(pos);
     setCooordinats();
-}
-
-void PolyLineItem::addToGroup(LineItem *item)
-{
-    if(points.size()==0)
-        setPos(item->scenePos());
-
-    setParams(item->getParams());
-    setPen(item->pen(),getParams());
-    lines.push_back(item);
-    setPath(_path);
-
 }
 
 void PolyLineItem::setParams(const ParamLines &value)
@@ -86,45 +68,14 @@ void PolyLineItem::setParams(const ParamLines &value)
 
 void PolyLineItem::setPen(const QPen &pen, ParamLines _params)
 {
-    QGraphicsPathItem::setPen(pen);
+    QGraphicsPolygonItem::setPen(pen);
     AbstractItem::setPen(pen,_params);
 }
 
-void PolyLineItem::drawOneLine(bool isEnd)
+void PolyLineItem::setPolygon(const QPolygonF &polygon)
 {
-    QPainterPath tmpPath;
-    QPointF currentPositionPath;
-    //  костыль для решения бага с измнением позиции сцены при рисовании второй линии
-    if(_path.isEmpty())
-        scenPosTmp = scenePos();
-    else if(_path.elementCount()==2)
-        setPos(scenPosTmp);
-    if(!_path.isEmpty())
-    {
-        tmpPath = _path;
-        currentPositionPath =tmpPath.currentPosition();
-    }
-    if(lines.size())
-    {
-        auto tmpIndex = lines.size()-1;
-        auto tmpLine = lines[tmpIndex]->line();
-        QPointF tmpPoint = QPointF(tmpLine.dx(),tmpLine.dy());
-        tmpPath.lineTo(currentPositionPath+tmpPoint);;
-        if(isEnd)
-        {
-            QPainterPath::Element pathElement;
-            if(!_path.isEmpty())
-                pathElement = _path.elementAt(_path.elementCount());
-            auto tmpElement = tmpPath.elementAt(tmpPath.elementCount());
-            if(pathElement!=tmpElement)
-                _path = tmpPath;
-            setPath(_path);
-            return;
-        }
-        setPath(tmpPath);
-    }
-
-
+    QGraphicsPolygonItem::setPolygon(polygon);
+    setCooordinats();
 }
 
 
@@ -135,4 +86,26 @@ QString PolyLineItem::paramToText()
         params.jointStyle = "round";
     QString tmpStr ="line join="+params.jointStyle+",";
     return  tmpStr+ AbstractLine::paramToText() ;
+}
+
+void PolyLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->setPen(pen());
+    painter->setBrush(Qt::NoBrush);
+    painter->drawPolyline(polygon());
+    if(flags() && isSelected())
+    {
+        painter->setPen(Qt::DashLine);
+        painter->drawRect(boundingRect());
+    }
+}
+
+QRectF PolyLineItem::boundingRect() const
+{
+    return  QGraphicsPolygonItem::boundingRect();
+}
+
+QPainterPath PolyLineItem::shape() const
+{
+    return QGraphicsPolygonItem::shape();
 }

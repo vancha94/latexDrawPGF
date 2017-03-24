@@ -45,7 +45,6 @@ void Rectangleltem::setRect(qreal x, qreal y, qreal width, qreal height)
 {
     QGraphicsRectItem::setRect(x,y,width,height);
     setCooordinats();
-
 }
 
 void Rectangleltem::setBrush(const QBrush &brush, ParamLines _params)
