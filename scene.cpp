@@ -11,6 +11,7 @@ Scene::Scene(QObject* parent): QGraphicsScene(parent)
     ellipseItem = 0;
     polygonItem = 0;
     textItem = 0;
+    pointItem=0;
 
     undoStack = new QUndoStack(this);
     undoAction = undoStack->createUndoAction(this);
@@ -395,6 +396,21 @@ void Scene::addText(QGraphicsSceneMouseEvent *event)
     textItem =0;
 }
 
+void Scene::addPoint(QGraphicsSceneMouseEvent *event)
+{
+    pointItem = new PointItem();
+    pointItem->setPen(border,params);
+    pointItem->setBrush(background,params);
+
+    QUndoCommand* addCommand = new AddCommand(pointItem);
+    addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
+    undoStack->push(addCommand);
+
+    pointItem->setRect(event->scenePos());
+    this->addItem(pointItem);
+    pushStack(pointItem);
+}
+
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(sceneMode == DrawLine ||
@@ -422,6 +438,10 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     else if (sceneMode == DrawText)
     {
         addText(event);
+    }
+    else if (sceneMode == DrawPoint)
+    {
+        addPoint(event);
     }
 
     QGraphicsScene::mousePressEvent(event);

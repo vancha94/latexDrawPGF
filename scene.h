@@ -19,6 +19,7 @@
 #include <ellipseitem.h>
 #include <polygonitem.h>
 #include <textitem.h>
+#include <pointitem.h>
 
 #include <QGraphicsTextItem>
 
@@ -28,7 +29,7 @@ class Scene : public QGraphicsScene
 public:
     enum Mode {NoMode, SelectObject, DrawLine,DrawPolyLine,
               DrawPencil,DrawRectangle,DrawEllipse,
-               DrawPolygon, DrawText};
+               DrawPolygon, DrawText, DrawPoint};
     Scene(QObject* parent = 0);
 
     void setMode(Mode mode);
@@ -72,6 +73,7 @@ private:
     EllipseItem *ellipseItem;
     PolygonItem *polygonItem;
     TextItem *textItem;
+    PointItem *pointItem;
 
 
     bool firstClick;

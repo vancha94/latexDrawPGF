@@ -59,6 +59,7 @@ private:
     QAction* ellipseAction;
     QAction* polygonAction;
     QAction* textAction;
+    QAction* pointAction;
     QActionGroup *drawActionGroup;
 
     QAction* undoAction;

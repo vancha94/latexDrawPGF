@@ -13,7 +13,7 @@ public:
     void setPos(const QPointF &pos);
     void setVisible(bool visible);
     void setPen(const QPen &pen,ParamLines _params);
-    void setRect(qreal x, qreal y, qreal width, qreal height);
+    virtual  void setRect(qreal x, qreal y, qreal width, qreal height);
     void setBrush(const QBrush &brush, ParamLines _params);
     void setCooordinats();
 };

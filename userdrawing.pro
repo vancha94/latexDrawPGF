@@ -16,7 +16,8 @@ SOURCES += \
     latextext.cpp \
     ellipseitem.cpp \
     polygonitem.cpp \
-    textitem.cpp
+    textitem.cpp \
+    pointitem.cpp
 
 HEADERS += \
     scene.h \
@@ -34,7 +35,8 @@ HEADERS += \
     latextext.h \
     ellipseitem.h \
     polygonitem.h \
-    textitem.h
+    textitem.h \
+    pointitem.h
 
 RESOURCES += \
     userdrawing.qrc
