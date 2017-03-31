@@ -607,15 +607,14 @@ void Scene::drawPolyline(QGraphicsSceneMouseEvent *event)
 
 void Scene::checkShiftPress(QGraphicsSceneMouseEvent *event)
 {
+
+    double k = (double)(event->scenePos().y()-origPoint.y())/
+               (event->scenePos().x()-origPoint.x());
     if(shiftPressed && (sceneMode == DrawLine ||
                         sceneMode == DrawPolyLine))
     {
 
-        // qDebug() << event->cu
         auto tmp = event->scenePos() - origPoint;
-
-        double k = (double)(event->scenePos().y()-origPoint.y())/
-                   (event->scenePos().x()-origPoint.x());
         if(fabs(k)>M_PI/4  )
         {
             QCursor::setPos(event->screenPos()-QPoint(tmp.x(),0));
@@ -631,8 +630,20 @@ void Scene::checkShiftPress(QGraphicsSceneMouseEvent *event)
     {
         auto tmp  = event->screenPos();
         auto tmpDelta = event->scenePos() - origPoint;
+        if(k>0 )
+       {
         tmp.setY(tmp.y() - tmpDelta.y()+tmpDelta.x());
         QCursor::setPos(tmp.x(),tmp.y());
+       }
+       else if (k<0)
+       {
+            if(tmpDelta.x()>0 && tmpDelta.y()<0)
+                tmp.setY(tmp.y() + fabs(tmpDelta.y())-fabs(tmpDelta.x()));
+            else if (tmpDelta.x()<0 && tmpDelta.y()>0)
+                tmp.setY(tmp.y() - tmpDelta.y()+fabs(tmpDelta.x()));
+
+           QCursor::setPos(tmp.x(),tmp.y());
+       }
     }
 }
 
