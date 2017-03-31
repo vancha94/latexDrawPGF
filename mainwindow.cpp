@@ -26,6 +26,8 @@ MainWindow::MainWindow()
     createColorToolBar();
     createConnections();
 
+
+   view->setFocus();
     // test code
 
 }

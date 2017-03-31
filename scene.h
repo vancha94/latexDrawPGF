@@ -60,6 +60,7 @@ protected: //events
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 signals:
     void transmitText(QString str);
 private:
@@ -100,6 +101,9 @@ private:
 
     ParamLines params;
 
+    bool shiftPressed;
+
+
     //tst
 private: //methods
     void makeItemsControllable(bool areControllable);
@@ -124,6 +128,9 @@ private: //methods
     void drawPolygon(QGraphicsSceneMouseEvent *event);
     void addText(QGraphicsSceneMouseEvent *event);
     void drawPolyline(QGraphicsSceneMouseEvent *event);
+    void addPoint(QGraphicsSceneMouseEvent *event);
+    void setOjbjectParams(QGraphicsItem *&item);
+    void checkShiftPress(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // SCENE_H
