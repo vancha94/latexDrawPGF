@@ -318,12 +318,12 @@ void Scene::addPolyLine(QGraphicsSceneMouseEvent *event, bool isPencil)
         firstClick = false;
         polylineitem = new PolyLineItem(isPencil);
         polylineitem->setPen(border,params);
-        pushStack(polylineitem);
 
 
         QUndoCommand* addCommand = new AddCommand(polylineitem);
         addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
         undoStack->push(addCommand);
+        pushStack(polylineitem);
 
         this->addItem(polylineitem);
     }
@@ -337,7 +337,7 @@ void Scene::addPolyLine(QGraphicsSceneMouseEvent *event, bool isPencil)
         if(event->button() == Qt::RightButton)
         {
             firstClick = true;
-
+            resetText();
             polylineitem = 0;
         }
         if(!isPencil)
@@ -357,11 +357,11 @@ void Scene::addPolygonItem(QGraphicsSceneMouseEvent *event)
         polygonItem = new PolygonItem();
         polygonItem->setPen(border,params);
         polygonItem->setBrush(background,params);
-        polygonItem->setPolygon(tmpPolygon);
 
         QUndoCommand* addCommand = new AddCommand(polygonItem);
         addCommandConnectSignal(dynamic_cast<AddCommand*>(addCommand));
         undoStack->push(addCommand);
+         pushStack(polygonItem);
 
         QPolygonF tmpPolygon;
         tmpPolygon << origPoint;
@@ -372,12 +372,12 @@ void Scene::addPolygonItem(QGraphicsSceneMouseEvent *event)
     {
         QPolygonF tmpPolygon = polygonItem->polygon();
         tmpPolygon <<event->scenePos();
-
+        polygonItem->setPolygon(tmpPolygon);
 
         if(event->button() == Qt::RightButton)
         {
             firstClick = true;
-            pushStack(polygonItem);
+          resetText();
             polygonItem = 0;
         }
     }
@@ -607,7 +607,8 @@ void Scene::drawPolyline(QGraphicsSceneMouseEvent *event)
 
 void Scene::checkShiftPress(QGraphicsSceneMouseEvent *event)
 {
-    if(shiftPressed && sceneMode == DrawLine)
+    if(shiftPressed && (sceneMode == DrawLine ||
+                        sceneMode == DrawPolyLine))
     {
 
         // qDebug() << event->cu
@@ -796,7 +797,8 @@ void Scene::keyPressEvent(QKeyEvent *event)
 void Scene::keyReleaseEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Shift)
-    {
         shiftPressed = false;
-    }
+
+    if(sceneMode == DrawText)
+        resetText();
 }
